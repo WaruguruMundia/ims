@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,              // needs roles
             SupervisorProfileSeeder::class, // needs users + departments
             InternProfileSeeder::class,     // needs users + departments + supervisors
+            ChecklistTemplateSeeder::class
         ]);
     }
 }

@@ -13,5 +13,26 @@
                 ({{ auth()->user()->role->name }})
             </div>
         </div>
-    </div>
+    </div>@foreach ($intern->onboardingChecklists as $checklistItem)
+        <div class="flex items-center justify-between border-b py-2">
+        <span class="{{ $checklistItem->is_completed ? 'line-through text-gray-400' : '' }}">
+            {{ $checklistItem->item }}
+            @if ($checklistItem->is_required) <span class="text-xs text-red-500">(required)</span> @endif
+        </span>
+
+            @can('complete', $checklistItem)
+                @if (!$checklistItem->is_completed)
+                    <form method="POST" action="{{ route('onboarding-checklist.complete', $checklistItem) }}">
+                        @csrf @method('PATCH')
+                        <button type="submit" class="btn btn-sm btn-success">Mark Complete</button>
+                    </form>
+                @else
+                    <span class="text-xs text-gray-500">
+                    Completed {{ $checklistItem->completed_at->diffForHumans() }} by {{ $checklistItem->completedBy->name }}
+                </span>
+                @endif
+            @endcan
+        </div>
+    @endforeach
+
 </x-app-layout>
