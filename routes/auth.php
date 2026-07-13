@@ -70,6 +70,12 @@ Route::middleware(['auth', 'role:administrator'])->prefix('admin')->name('admin.
     Route::get('checklist-templates/{checklistTemplate}/edit', [ChecklistTemplateController::class, 'edit'])->name('checklist-templates.edit');
     Route::put('checklist-templates/{checklistTemplate}', [ChecklistTemplateController::class, 'update'])->name('checklist-templates.update');
     Route::patch('checklist-templates/{checklistTemplate}/toggle-active', [ChecklistTemplateController::class, 'toggleActive'])->name('checklist-templates.toggle-active');
+    Route::get('departments', [DepartmentController::class, 'index'])->name('departments.index');
+    Route::get('departments/create', [DepartmentController::class, 'create'])->name('departments.create');
+    Route::post('departments', [DepartmentController::class, 'store'])->name('departments.store');
+    Route::get('departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
+    Route::put('departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
+    Route::patch('departments/{department}/toggle-active', [DepartmentController::class, 'toggleActive'])->name('departments.toggle-active');
     Route::get('interns/create', [InternRegistrationController::class, 'create'])->name('interns.create');
     Route::post('interns', [InternRegistrationController::class, 'store'])->name('interns.store');
 });
