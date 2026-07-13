@@ -1,54 +1,67 @@
 <x-app-layout>
-    <div class="container py-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2>Departments</h2>
-            <a href="{{ route('admin.departments.create') }}" class="btn btn-primary">Add Department</a>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl">Departments</h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+
+                <div class="flex justify-between items-center mb-4">
+                    <a href="{{ route('admin.departments.create') }}"
+                       class="px-4 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700">
+                        Add Department
+                    </a>
+                </div>
+
+                @if (session('status'))
+                    <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">{{ session('status') }}</div>
+                @endif
+
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                    <tr class="border-b">
+                        <th class="py-2 pr-4">Name</th>
+                        <th class="py-2 pr-4">Code</th>
+                        <th class="py-2 pr-4">Interns</th>
+                        <th class="py-2 pr-4">Checklist Templates</th>
+                        <th class="py-2 pr-4">Status</th>
+                        <th class="py-2 text-right">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach ($departments as $department)
+                        <tr class="border-b {{ !$department->is_active ? 'text-gray-400' : '' }}">
+                            <td class="py-2 pr-4">{{ $department->name }}</td>
+                            <td class="py-2 pr-4">{{ $department->code ?? '—' }}</td>
+                            <td class="py-2 pr-4">{{ $department->interns_count }}</td>
+                            <td class="py-2 pr-4">{{ $department->checklist_templates_count }}</td>
+                            <td class="py-2 pr-4">
+                                @if ($department->is_active)
+                                    <span class="px-2 py-0.5 text-xs bg-green-100 text-green-800 rounded">Active</span>
+                                @else
+                                    <span class="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded">Inactive</span>
+                                @endif
+                            </td>
+                            <td class="py-2 text-right space-x-2">
+                                <a href="{{ route('admin.departments.edit', $department) }}"
+                                   class="text-sm text-indigo-600 hover:underline">Edit</a>
+                                <form action="{{ route('admin.departments.toggle-active', $department) }}"
+                                      method="POST" class="inline">
+                                    @csrf @method('PATCH')
+                                    <button type="submit" class="text-sm text-gray-600 hover:underline"
+                                            @if ($department->is_active && $department->interns_count > 0)
+                                                onclick="return confirm('This department has {{ $department->interns_count }} intern(s) assigned. Deactivate anyway?')"
+                                        @endif>
+                                        {{ $department->is_active ? 'Deactivate' : 'Reactivate' }}
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-        @if (session('status'))
-            <div class="alert alert-success">{{ session('status') }}</div>
-        @endif
-
-        <table class="table table-bordered align-middle">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Code</th>
-                <th>Interns</th>
-                <th>Checklist Templates</th>
-                <th>Status</th>
-                <th class="text-end">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach ($departments as $department)
-                <tr class="{{ !$department->is_active ? 'text-muted' : '' }}">
-                    <td>{{ $department->name }}</td>
-                    <td>{{ $department->code ?? '—' }}</td>
-                    <td>{{ $department->interns_count }}</td>
-                    <td>{{ $department->checklist_templates_count }}</td>
-                    <td>
-                        @if ($department->is_active)
-                            <span class="badge bg-success">Active</span>
-                        @else
-                            <span class="badge bg-secondary">Inactive</span>
-                        @endif
-                    </td>
-                    <td class="text-end">
-                        <a href="{{ route('admin.departments.edit', $department) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                        <form action="{{ route('admin.departments.toggle-active', $department) }}" method="POST" class="d-inline">
-                            @csrf @method('PATCH')
-                            <button type="submit" class="btn btn-sm btn-outline-secondary"
-                                    @if ($department->is_active && $department->interns_count > 0)
-                                        onclick="return confirm('This department has {{ $department->interns_count }} intern(s) assigned. Deactivate anyway?')"
-                                @endif>
-                                {{ $department->is_active ? 'Deactivate' : 'Reactivate' }}
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
     </div>
 </x-app-layout>
