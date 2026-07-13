@@ -70,4 +70,6 @@ Route::middleware(['auth', 'role:administrator'])->prefix('admin')->name('admin.
     Route::get('checklist-templates/{checklistTemplate}/edit', [ChecklistTemplateController::class, 'edit'])->name('checklist-templates.edit');
     Route::put('checklist-templates/{checklistTemplate}', [ChecklistTemplateController::class, 'update'])->name('checklist-templates.update');
     Route::patch('checklist-templates/{checklistTemplate}/toggle-active', [ChecklistTemplateController::class, 'toggleActive'])->name('checklist-templates.toggle-active');
+    Route::get('interns/create', [InternRegistrationController::class, 'create'])->name('interns.create');
+    Route::post('interns', [InternRegistrationController::class, 'store'])->name('interns.store');
 });

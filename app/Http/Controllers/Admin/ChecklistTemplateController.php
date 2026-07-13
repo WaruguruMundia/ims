@@ -25,8 +25,7 @@ class ChecklistTemplateController extends Controller
 
     public function create(): View
     {
-        $departments = Department::orderBy('name')->get();
-        return view('admin.checklist-templates.create', compact('departments'));
+        $departments = Department::where('is_active', true)->orderBy('name')->get();        return view('admin.checklist-templates.create', compact('departments'));
     }
 
     public function store(Request $request): RedirectResponse
