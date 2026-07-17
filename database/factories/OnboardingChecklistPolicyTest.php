@@ -9,6 +9,14 @@ uses(RefreshDatabase::class);
 
 it('allows an administrator to complete any intern\'s checklist item', function () {
     $admin = User::factory()->admin()->create();
+    $intern = Intern::factory()->create();
+    $checklistItem = OnboardingChecklist::factory()->create(['intern_id' => $intern->id]);
+
+    expect($admin->can('complete', $checklistItem))->toBeTrue();
+});
+
+it('allows an administrator to complete any intern\'s checklist item', function () {
+    $admin = User::factory()->admin()->create();
     $checklistItem = OnboardingChecklist::factory()->create();
 
     expect($admin->can('complete', $checklistItem))->toBeTrue();

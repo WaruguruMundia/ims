@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('t_interns', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->unique()->constrained('t_users')->cascadeOnDelete();
-            $table->foreignId('dept_id')->constrained('t_departments');
-            $table->foreignId('supervisor_id')->constrained('t_supervisors');
+            $table->foreignId('dept_id')->constrained('t_departments')->restrictOnDelete();
+            $table->foreignId('supervisor_id')->constrained('t_users')->restrictOnDelete();
             $table->string('institution');      // their university
             $table->string('programme');        // their degree programme
             $table->string('student_number')->nullable();
