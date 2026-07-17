@@ -26,13 +26,6 @@ class InternDashboardTest extends TestCase
             'is_active' => true,
         ]);
 
-        $supervisorProfileId = \Illuminate\Support\Facades\DB::table('t_supervisors')->insertGetId([
-            'user_id' => $supervisor->id,
-            'dept_id' => $dept->id,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
         $user = User::create([
             'name' => 'Test Intern',
             'email' => 'intern@example.com',
@@ -50,6 +43,8 @@ class InternDashboardTest extends TestCase
             'start_date' => now(),
             'end_date' => now()->addMonths(3),
         ]);
+
+        $response = $this->actingAs($user)->get(route('intern.dashboard'));
 
         $response = $this->actingAs($user)->get(route('intern.dashboard'));
 
