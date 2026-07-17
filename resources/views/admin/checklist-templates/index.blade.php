@@ -1,73 +1,83 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl">Onboarding Checklist Templates</h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Checklist Templates') }}
+        </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-                <div class="flex justify-between items-center mb-4">
-                    <a href="{{ route('admin.checklist-templates.create') }}"
-                       class="px-4 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700">
-                        Add Item
+            @if (session('status'))
+                <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        Templates
+                    </h3>
+
+                    <a href="{{ route('admin.checklist-templates.create') }}" class="text-blue-600 hover:text-blue-800">
+                        Add Template
                     </a>
                 </div>
-
-                @if (session('status'))
-                    <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">{{ session('status') }}</div>
-                @endif
-
-                @foreach ($templates as $groupName => $items)
-                    <h3 class="font-semibold text-md mt-6 mb-2 text-gray-700">{{ $groupName }}</h3>
-
-                    <table class="w-full text-left border-collapse mb-4">
-                        <thead>
-                        <tr class="border-b">
-                            <th class="py-2 pr-4">Order</th>
-                            <th class="py-2 pr-4">Item</th>
-                            <th class="py-2 pr-4">Required</th>
-                            <th class="py-2 pr-4">Status</th>
-                            <th class="py-2 text-right">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach ($items as $template)
-                            <tr class="border-b {{ !$template->is_active ? 'text-gray-400' : '' }}">
-                                <td class="py-2 pr-4">{{ $template->display_order }}</td>
-                                <td class="py-2 pr-4">{{ $template->item_text }}</td>
-                                <td class="py-2 pr-4">
-                                    @if ($template->is_required)
-                                        <span class="px-2 py-0.5 text-xs bg-red-100 text-red-700 rounded">Required</span>
-                                    @else
-                                        <span class="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded">Optional</span>
-                                    @endif
-                                </td>
-                                <td class="py-2 pr-4">
-                                    @if ($template->is_active)
-                                        <span class="px-2 py-0.5 text-xs bg-green-100 text-green-800 rounded">Active</span>
-                                    @else
-                                        <span class="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded">Inactive</span>
-                                    @endif
-                                </td>
-                                <td class="py-2 text-right space-x-2">
-                                    <a href="{{ route('admin.checklist-templates.edit', $template) }}"
-                                       class="text-sm text-indigo-600 hover:underline">Edit</a>
-                                    <form action="{{ route('admin.checklist-templates.toggle-active', $template) }}"
-                                          method="POST" class="inline">
-                                        @csrf @method('PATCH')
-                                        <button type="submit" class="text-sm text-gray-600 hover:underline">
-                                            {{ $template->is_active ? 'Deactivate' : 'Reactivate' }}
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                @endforeach
-
             </div>
+
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6">
+                    @if ($templates->isEmpty())
+                        <p class="text-gray-600">
+                            No checklist templates found.
+                        </p>
+                    @else
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Item</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Department</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Order</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Required</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Active</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                @foreach ($templates as $template)
+                                    <tr>
+                                        <td class="px-4 py-2 text-sm text-gray-900">{{ $template->item_text }}</td>
+                                        <td class="px-4 py-2 text-sm text-gray-700">{{ $template->department?->name ?? 'Global' }}</td>
+                                        <td class="px-4 py-2 text-sm text-gray-700">{{ $template->display_order }}</td>
+                                        <td class="px-4 py-2 text-sm text-gray-700">{{ $template->is_required ? 'Yes' : 'No' }}</td>
+                                        <td class="px-4 py-2 text-sm text-gray-700">{{ $template->is_active ? 'Yes' : 'No' }}</td>
+                                        <td class="px-4 py-2 text-sm space-x-3">
+                                            <a href="{{ route('admin.checklist-templates.edit', $template) }}" class="text-blue-600 hover:text-blue-800">
+                                                Edit
+                                            </a>
+
+                                            @if ($template->is_active)
+                                                <form method="POST" action="{{ route('admin.checklist-templates.destroy', $template) }}" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+
+                                                    <button type="submit" class="text-red-600 hover:text-red-800">
+                                                        Deactivate
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
         </div>
     </div>
 </x-app-layout>

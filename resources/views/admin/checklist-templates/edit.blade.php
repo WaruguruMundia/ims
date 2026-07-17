@@ -1,17 +1,28 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl">Edit Checklist Template Item</h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Edit Checklist Template') }}
+        </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <form action="{{ route('admin.checklist-templates.update', $checklistTemplate) }}" method="POST">
-                    @csrf @method('PUT')
-                    @include('admin.checklist-templates._form', ['departments' => $departments, 'template' => $checklistTemplate])
-                    <button type="submit" class="mt-4 px-4 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700">
-                        Update
-                    </button>
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <form method="POST" action="{{ route('admin.checklist-templates.update', $checklistTemplate) }}" class="p-6 space-y-6">
+                    @csrf
+                    @method('PATCH')
+
+                    @include('admin.checklist-templates._form')
+
+                    <div class="flex items-center justify-end space-x-3">
+                        <a href="{{ route('admin.checklist-templates.index') }}" class="text-gray-600 hover:text-gray-900">
+                            Cancel
+                        </a>
+
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">
+                            Update
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
