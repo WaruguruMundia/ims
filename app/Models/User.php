@@ -3,10 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Couchbase\Role;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,7 +11,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use HasFactory, Notifiable;
 
     protected $table = 't_users';
 
@@ -40,14 +37,12 @@ class User extends Authenticatable
     }
 
     // ── Relationships ──────────────────────────────────────────
-
     public function role(): BelongsTo
     {
         return $this->belongsTo(\App\Models\Role::class, 'role_id');
     }
 
     // ── Role helpers ───────────────────────────────────────────
-
     public function hasRole(string $slug): bool
     {
         return $this->role?->slug === $slug;
@@ -69,7 +64,6 @@ class User extends Authenticatable
     }
 
     // ── Dashboard route per role ───────────────────────────────
-
     public function dashboardRoute(): string
     {
         return match($this->role?->slug) {
