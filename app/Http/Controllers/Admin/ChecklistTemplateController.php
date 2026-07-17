@@ -14,60 +14,81 @@ class ChecklistTemplateController extends Controller
     public function index(): View
     {
         $templates = ChecklistTemplate::with('department')
-            ->orderByRaw('dept_id IS NULL DESC') // global items first
-            ->orderBy('dept_id')
             ->orderBy('display_order')
-            ->get()
-            ->groupBy(fn ($t) => $t->department?->name ?? 'Global (all departments)');
+            ->orderBy('id')
+            ->get();
 
         return view('admin.checklist-templates.index', compact('templates'));
     }
 
     public function create(): View
     {
-        $departments = Department::where('is_active', true)->orderBy('name')->get();        return view('admin.checklist-templates.create', compact('departments'));
+        $departments = Department::orderBy('name')->get();
+
+        return view('admin.checklist-templates.create', compact('departments'));
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $this->validated($request);
-        ChecklistTemplate::create($validated);
+        $validated = $request->validate([
+            'dept_id' => ['nullable', 'exists:t_departments,id'],
+            'item_text' => ['required', 'string', 'max:255'],
+            'display_order' => ['required', 'integer', 'min:0'],
+            'is_required' => ['nullable', 'boolean'],
+            'is_active' => ['nullable', 'boolean'],
+        ]);
 
-        return redirect()->route('admin.checklist-templates.index')
-            ->with('status', 'Checklist template created.');
+        ChecklistTemplate::create([
+            'dept_id' => $validated['dept_id'] ?? null,
+            'item_text' => $validated['item_text'],
+            'display_order' => $validated['display_order'],
+            'is_required' => $request->boolean('is_required'),
+            'is_active' => $request->boolean('is_active', true),
+        ]);
+
+        return redirect()
+            ->route('admin.checklist-templates.index')
+            ->with('status', 'Checklist template created successfully.');
     }
 
     public function edit(ChecklistTemplate $checklistTemplate): View
     {
         $departments = Department::orderBy('name')->get();
+
         return view('admin.checklist-templates.edit', compact('checklistTemplate', 'departments'));
     }
 
     public function update(Request $request, ChecklistTemplate $checklistTemplate): RedirectResponse
     {
-        $validated = $this->validated($request);
-        $checklistTemplate->update($validated);
-
-        return redirect()->route('admin.checklist-templates.index')
-            ->with('status', 'Checklist template updated.');
-    }
-
-    public function toggleActive(ChecklistTemplate $checklistTemplate): RedirectResponse
-    {
-        $checklistTemplate->update(['is_active' => ! $checklistTemplate->is_active]);
-
-        return back()->with('status', $checklistTemplate->is_active
-            ? 'Template reactivated.'
-            : 'Template deactivated. Existing intern checklists are unaffected.');
-    }
-
-    private function validated(Request $request): array
-    {
-        return $request->validate([
+        $validated = $request->validate([
             'dept_id' => ['nullable', 'exists:t_departments,id'],
             'item_text' => ['required', 'string', 'max:255'],
             'display_order' => ['required', 'integer', 'min:0'],
-            'is_required' => ['required', 'boolean'],
+            'is_required' => ['nullable', 'boolean'],
+            'is_active' => ['nullable', 'boolean'],
         ]);
+
+        $checklistTemplate->update([
+            'dept_id' => $validated['dept_id'] ?? null,
+            'item_text' => $validated['item_text'],
+            'display_order' => $validated['display_order'],
+            'is_required' => $request->boolean('is_required'),
+            'is_active' => $request->boolean('is_active'),
+        ]);
+
+        return redirect()
+            ->route('admin.checklist-templates.index')
+            ->with('status', 'Checklist template updated successfully.');
+    }
+
+    public function destroy(ChecklistTemplate $checklistTemplate): RedirectResponse
+    {
+        $checklistTemplate->update([
+            'is_active' => false,
+        ]);
+
+        return redirect()
+            ->route('admin.checklist-templates.index')
+            ->with('status', 'Checklist template deactivated successfully.');
     }
 }
