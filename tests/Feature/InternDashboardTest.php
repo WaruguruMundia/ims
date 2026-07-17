@@ -17,7 +17,7 @@ class InternDashboardTest extends TestCase
         $internRole = Role::create(['name' => 'Intern', 'slug' => 'intern']);
         $supervisorRole = Role::create(['name' => 'Supervisor', 'slug' => 'supervisor']);
         $dept = \App\Models\Department::create(['name' => 'IT']);
-        
+
         $supervisor = User::create([
             'name' => 'Test Supervisor',
             'email' => 'supervisor@example.com',
@@ -40,11 +40,11 @@ class InternDashboardTest extends TestCase
             'role_id' => $internRole->id,
             'is_active' => true,
         ]);
-        
+
         $intern = Intern::create([
             'user_id' => $user->id,
             'dept_id' => $dept->id,
-            'supervisor_id' => $supervisorProfileId,
+            'supervisor_id' => $supervisor->id,
             'institution' => 'Test Uni',
             'programme' => 'CS',
             'start_date' => now(),
