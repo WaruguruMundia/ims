@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\SupervisorDashboardController;
 use App\Http\Controllers\InternDashboardController;
+use App\Http\Controllers\OnboardingChecklistController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
