@@ -27,6 +27,12 @@ Route::middleware('auth')->group(function () {
         return redirect()->route(Auth::user()->dashboardRoute());
     })->name('dashboard');
 
+    Route::patch('/onboarding-checklists/{checklistItem}/complete', [OnboardingChecklistController::class, 'complete'])
+        ->name('onboarding-checklists.complete');
+
+    Route::patch('/onboarding-checklists/{checklistItem}/reopen', [OnboardingChecklistController::class, 'reopen'])
+        ->name('onboarding-checklists.reopen');
+
     // ── Admin ──────────────────────────────────────────────────
     Route::middleware('role:admin')
         ->prefix('admin')
