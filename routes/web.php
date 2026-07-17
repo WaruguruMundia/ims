@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ChecklistTemplateController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\SupervisorDashboardController;
 use App\Http\Controllers\InternDashboardController;
@@ -41,7 +42,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/dashboard', [AdminDashboardController::class, 'index'])
                 ->name('dashboard');
 
-            // Intern onboarding, reporting — added here as you build each module
+            Route::resource('checklist-templates', ChecklistTemplateController::class)
+                ->except(['show']);
         });
 
     // ── Supervisor ─────────────────────────────────────────────
