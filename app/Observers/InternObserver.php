@@ -3,12 +3,12 @@
 namespace App\Observers;
 
 use App\Models\Intern;
+use App\Services\OnboardingService;
 
 class InternObserver
 {
     public function created(Intern $intern): void
     {
-        $intern->generateOnboardingChecklist();
+        app(OnboardingService::class)->initializeChecklist($intern);
     }
-
 }

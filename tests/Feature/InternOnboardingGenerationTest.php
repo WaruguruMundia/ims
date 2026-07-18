@@ -49,18 +49,25 @@ class InternOnboardingGenerationTest extends TestCase
         ]);
     }
 
-    public function test_it_does_not_generate_inactive_template_items(): void
+    public function test_it_does_not_duplicate_checklist_items_when_generation_runs_more_than_once(): void
     {
         ChecklistTemplate::factory()->create([
-            'item_text' => 'Inactive task',
-            'is_active' => false,
+            'dept_id' => null,
+            'item_text' => 'Submit national ID',
+            'is_required' => true,
+            'is_active' => true,
         ]);
 
         $intern = Intern::factory()->create();
 
-        $this->assertDatabaseMissing('t_onboarding_checklists', [
-            'intern_id' => $intern->id,
-            'item' => 'Inactive task',
-        ]);
+        $intern->generateOnboardingChecklist();
+        $intern->generateOnboardingChecklist();
+
+        $this->assertSame(
+            1,
+            $intern->onboardingChecklists()
+                ->where('item', 'Submit national ID')
+                ->count()
+        );
     }
 }
