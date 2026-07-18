@@ -1,36 +1,91 @@
-@php $template ??= null; @endphp
+<div class="space-y-4">
+    <div>
+        <label for="dept_id" class="block text-sm font-medium text-gray-700">
+            Department
+        </label>
 
-<div class="mb-4">
-    <label class="block text-sm font-medium text-gray-700 mb-1">Department</label>
-    <select name="dept_id" class="w-full rounded border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-        <option value="">Global (applies to all departments)</option>
-        @foreach ($departments as $dept)
-            <option value="{{ $dept->id }}" @selected(old('dept_id', $template?->dept_id) == $dept->id)>
-                {{ $dept->name }}
-            </option>
-        @endforeach
-    </select>
-    @error('dept_id') <div class="text-sm text-red-600 mt-1">{{ $message }}</div> @enderror
-</div>
+        <select name="dept_id" id="dept_id" class="mt-1 block w-full rounded border-gray-300">
+            <option value="">Global</option>
 
-<div class="mb-4">
-    <label class="block text-sm font-medium text-gray-700 mb-1">Item Text</label>
-    <input type="text" name="item_text" value="{{ old('item_text', $template?->item_text) }}"
-           class="w-full rounded border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-    @error('item_text') <div class="text-sm text-red-600 mt-1">{{ $message }}</div> @enderror
-</div>
+            @foreach ($departments as $department)
+                <option
+                    value="{{ $department->id }}"
+                    @selected(old('dept_id', $checklistTemplate->dept_id ?? null) == $department->id)
+                >
+                    {{ $department->name }}
+                </option>
+            @endforeach
+        </select>
 
-<div class="mb-4">
-    <label class="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
-    <input type="number" name="display_order" value="{{ old('display_order', $template?->display_order ?? 0) }}"
-           class="w-full rounded border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-    @error('display_order') <div class="text-sm text-red-600 mt-1">{{ $message }}</div> @enderror
-</div>
+        @error('dept_id')
+        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+        @enderror
+    </div>
 
-<div class="flex items-center">
-    <input type="hidden" name="is_required" value="0">
-    <input type="checkbox" name="is_required" value="1" id="is_required"
-           class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-        @checked(old('is_required', $template?->is_required ?? true))>
-    <label for="is_required" class="ml-2 text-sm text-gray-700">Required item</label>
+    <div>
+        <label for="item_text" class="block text-sm font-medium text-gray-700">
+            Item Text
+        </label>
+
+        <input
+            type="text"
+            name="item_text"
+            id="item_text"
+            value="{{ old('item_text', $checklistTemplate->item_text ?? '') }}"
+            class="mt-1 block w-full rounded border-gray-300"
+            required
+        >
+
+        @error('item_text')
+        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+        @enderror
+    </div>
+
+    <div>
+        <label for="display_order" class="block text-sm font-medium text-gray-700">
+            Display Order
+        </label>
+
+        <input
+            type="number"
+            name="display_order"
+            id="display_order"
+            value="{{ old('display_order', $checklistTemplate->display_order ?? 0) }}"
+            class="mt-1 block w-full rounded border-gray-300"
+            min="0"
+            required
+        >
+
+        @error('display_order')
+        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+        @enderror
+    </div>
+
+    <div class="flex items-center space-x-2">
+        <input
+            type="checkbox"
+            name="is_required"
+            id="is_required"
+            value="1"
+            @checked(old('is_required', $checklistTemplate->is_required ?? true))
+        >
+
+        <label for="is_required" class="text-sm text-gray-700">
+            Required
+        </label>
+    </div>
+
+    <div class="flex items-center space-x-2">
+        <input
+            type="checkbox"
+            name="is_active"
+            id="is_active"
+            value="1"
+            @checked(old('is_active', $checklistTemplate->is_active ?? true))
+        >
+
+        <label for="is_active" class="text-sm text-gray-700">
+            Active
+        </label>
+    </div>
 </div>

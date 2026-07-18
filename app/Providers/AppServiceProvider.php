@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Intern;
+use App\Observers\InternObserver;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,5 +26,6 @@ class AppServiceProvider extends ServiceProvider
         if (DB::connection()->getDriverName() === 'sqlite') {
             DB::statement('PRAGMA foreign_keys = ON;');
         }
+        Intern::observe(InternObserver::class);
     }
 }

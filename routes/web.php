@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\ChecklistTemplateController;
+use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\InternRegistrationController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\SupervisorDashboardController;
 use App\Http\Controllers\InternDashboardController;
+use App\Http\Controllers\OnboardingChecklistController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,6 +30,12 @@ Route::middleware('auth')->group(function () {
         return redirect()->route(Auth::user()->dashboardRoute());
     })->name('dashboard');
 
+    Route::patch('/onboarding-checklists/{checklistItem}/complete', [OnboardingChecklistController::class, 'complete'])
+        ->name('onboarding-checklists.complete');
+
+    Route::patch('/onboarding-checklists/{checklistItem}/reopen', [OnboardingChecklistController::class, 'reopen'])
+        ->name('onboarding-checklists.reopen');
+
     // ── Admin ──────────────────────────────────────────────────
     Route::middleware('role:admin')
         ->prefix('admin')
@@ -34,7 +44,18 @@ Route::middleware('auth')->group(function () {
             Route::get('/dashboard', [AdminDashboardController::class, 'index'])
                 ->name('dashboard');
 
-            // Intern onboarding, reporting — added here as you build each module
+            Route::resource('checklist-templates', ChecklistTemplateController::class)
+                ->except(['show']);
+
+            Route::resource('departments', DepartmentController::class)
+                ->except(['show', 'destroy']);
+            Route::patch('departments/{department}/toggle-active', [DepartmentController::class, 'toggleActive'])
+                ->name('departments.toggle-active');
+
+            Route::get('interns/create', [InternRegistrationController::class, 'create'])
+                ->name('interns.create');
+            Route::post('interns', [InternRegistrationController::class, 'store'])
+                ->name('interns.store');
         });
 
     // ── Supervisor ─────────────────────────────────────────────

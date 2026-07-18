@@ -17,20 +17,13 @@ class InternDashboardTest extends TestCase
         $internRole = Role::create(['name' => 'Intern', 'slug' => 'intern']);
         $supervisorRole = Role::create(['name' => 'Supervisor', 'slug' => 'supervisor']);
         $dept = \App\Models\Department::create(['name' => 'IT']);
-        
+
         $supervisor = User::create([
             'name' => 'Test Supervisor',
             'email' => 'supervisor@example.com',
             'password' => bcrypt('password'),
             'role_id' => $supervisorRole->id,
             'is_active' => true,
-        ]);
-
-        $supervisorProfileId = \Illuminate\Support\Facades\DB::table('t_supervisors')->insertGetId([
-            'user_id' => $supervisor->id,
-            'dept_id' => $dept->id,
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
 
         $user = User::create([
@@ -40,16 +33,18 @@ class InternDashboardTest extends TestCase
             'role_id' => $internRole->id,
             'is_active' => true,
         ]);
-        
+
         $intern = Intern::create([
             'user_id' => $user->id,
             'dept_id' => $dept->id,
-            'supervisor_id' => $supervisorProfileId,
+            'supervisor_id' => $supervisor->id,
             'institution' => 'Test Uni',
             'programme' => 'CS',
             'start_date' => now(),
             'end_date' => now()->addMonths(3),
         ]);
+
+        $response = $this->actingAs($user)->get(route('intern.dashboard'));
 
         $response = $this->actingAs($user)->get(route('intern.dashboard'));
 
