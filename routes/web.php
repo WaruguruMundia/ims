@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\ChecklistTemplateController;
+use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\InternRegistrationController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\SupervisorDashboardController;
 use App\Http\Controllers\InternDashboardController;
@@ -44,6 +46,16 @@ Route::middleware('auth')->group(function () {
 
             Route::resource('checklist-templates', ChecklistTemplateController::class)
                 ->except(['show']);
+
+            Route::resource('departments', DepartmentController::class)
+                ->except(['show', 'destroy']);
+            Route::patch('departments/{department}/toggle-active', [DepartmentController::class, 'toggleActive'])
+                ->name('departments.toggle-active');
+
+            Route::get('interns/create', [InternRegistrationController::class, 'create'])
+                ->name('interns.create');
+            Route::post('interns', [InternRegistrationController::class, 'store'])
+                ->name('interns.store');
         });
 
     // ── Supervisor ─────────────────────────────────────────────

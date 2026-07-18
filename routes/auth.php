@@ -37,16 +37,17 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('verify-email', EmailVerificationPromptController::class)
-        ->name('verification.notice');
-
-    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
-        ->middleware(['signed', 'throttle:6,1'])
-        ->name('verification.verify');
-
-    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-        ->middleware('throttle:6,1')
-        ->name('verification.send');
+    // Email verification routes disabled as per requirements
+    // Route::get('verify-email', EmailVerificationPromptController::class)
+    //     ->name('verification.notice');
+    //
+    // Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+    //     ->middleware(['signed', 'throttle:6,1'])
+    //     ->name('verification.verify');
+    //
+    // Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+    //     ->middleware('throttle:6,1')
+    //     ->name('verification.send');
 
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
         ->name('password.confirm');
@@ -59,23 +60,4 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
 });
 
-Route::middleware(['auth'])->patch('/onboarding-checklist/{checklistItem}/complete',
-    [OnboardingChecklistController::class, 'complete'])->name('onboarding-checklist.complete');
 
-// routes/web.php — inside your existing admin-prefixed group
-Route::middleware(['auth', 'role:administrator'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('checklist-templates', [ChecklistTemplateController::class, 'index'])->name('checklist-templates.index');
-    Route::get('checklist-templates/create', [ChecklistTemplateController::class, 'create'])->name('checklist-templates.create');
-    Route::post('checklist-templates', [ChecklistTemplateController::class, 'store'])->name('checklist-templates.store');
-    Route::get('checklist-templates/{checklistTemplate}/edit', [ChecklistTemplateController::class, 'edit'])->name('checklist-templates.edit');
-    Route::put('checklist-templates/{checklistTemplate}', [ChecklistTemplateController::class, 'update'])->name('checklist-templates.update');
-    Route::patch('checklist-templates/{checklistTemplate}/toggle-active', [ChecklistTemplateController::class, 'toggleActive'])->name('checklist-templates.toggle-active');
-    Route::get('departments', [DepartmentController::class, 'index'])->name('departments.index');
-    Route::get('departments/create', [DepartmentController::class, 'create'])->name('departments.create');
-    Route::post('departments', [DepartmentController::class, 'store'])->name('departments.store');
-    Route::get('departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
-    Route::put('departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
-    Route::patch('departments/{department}/toggle-active', [DepartmentController::class, 'toggleActive'])->name('departments.toggle-active');
-    Route::get('interns/create', [InternRegistrationController::class, 'create'])->name('interns.create');
-    Route::post('interns', [InternRegistrationController::class, 'store'])->name('interns.store');
-});
