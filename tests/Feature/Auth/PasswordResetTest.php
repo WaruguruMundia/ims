@@ -38,8 +38,16 @@ class PasswordResetTest extends TestCase
 
         $this->post('/forgot-password', ['email' => $user->email]);
 
-        Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
-            $response = $this->get('/reset-password/'.$notification->token);
+        Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
+            $url = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                'password.reset',
+                now()->addMinutes(config('auth.passwords.users.expire')),
+                [
+                    'token' => $notification->token,
+                    'email' => $user->getEmailForPasswordReset(),
+                ]
+            );
+            $response = $this->get($url);
 
             $response->assertStatus(200);
 
@@ -69,5 +77,45 @@ class PasswordResetTest extends TestCase
 
             return true;
         });
+    }
+
+    public function test_reset_password_screen_cannot_be_rendered_without_signature(): void
+    {
+        $response = $this->get('/reset-password/some-token');
+
+        $response->assertRedirect(route('password.request'));
+        $response->assertSessionHasErrors(['email']);
+    }
+
+    public function test_reset_password_screen_cannot_be_rendered_with_invalid_signature(): void
+    {
+        $url = route('password.reset', [
+            'token' => 'some-token',
+            'email' => 'test@example.com',
+            'expires' => now()->addMinutes(60)->timestamp,
+            'signature' => 'invalid-signature-hash',
+        ]);
+
+        $response = $this->get($url);
+
+        $response->assertRedirect(route('password.request'));
+        $response->assertSessionHasErrors(['email']);
+    }
+
+    public function test_reset_password_screen_cannot_be_rendered_with_expired_signature(): void
+    {
+        $url = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+            'password.reset',
+            now()->subMinutes(1),
+            [
+                'token' => 'some-token',
+                'email' => 'test@example.com',
+            ]
+        );
+
+        $response = $this->get($url);
+
+        $response->assertRedirect(route('password.request'));
+        $response->assertSessionHasErrors(['email']);
     }
 }

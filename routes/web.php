@@ -52,10 +52,8 @@ Route::middleware('auth')->group(function () {
             Route::patch('departments/{department}/toggle-active', [DepartmentController::class, 'toggleActive'])
                 ->name('departments.toggle-active');
 
-            Route::get('interns/create', [InternRegistrationController::class, 'create'])
-                ->name('interns.create');
-            Route::post('interns', [InternRegistrationController::class, 'store'])
-                ->name('interns.store');
+            Route::resource('interns', InternRegistrationController::class)
+                ->except(['show']);
         });
 
     // ── Supervisor ─────────────────────────────────────────────
@@ -70,7 +68,7 @@ Route::middleware('auth')->group(function () {
         });
 
     // ── Intern ─────────────────────────────────────────────────
-    Route::middleware('role:intern')
+    Route::middleware(['role:intern', 'verified'])
         ->prefix('intern')
         ->name('intern.')
         ->group(function () {

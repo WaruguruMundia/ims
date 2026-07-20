@@ -14,9 +14,17 @@
                         Intern Onboarding Overview
                     </h3>
 
-                    <a href="{{ route('admin.checklist-templates.index') }}" class="text-blue-600 hover:text-blue-800">
-                        Manage Checklist Templates
-                    </a>
+                    <div class="flex space-x-6">
+                        <a href="{{ route('admin.interns.create') }}" class="text-indigo-600 hover:text-indigo-900 font-semibold">
+                            Register New Intern
+                        </a>
+                        <a href="{{ route('admin.departments.index') }}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                            Manage Departments
+                        </a>
+                        <a href="{{ route('admin.checklist-templates.index') }}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                            Manage Checklist Templates
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -36,6 +44,7 @@
                                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Department</th>
                                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Progress</th>
                                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Required Complete</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
@@ -59,6 +68,18 @@
                                             @else
                                                 <span class="text-yellow-700">No</span>
                                             @endif
+                                        </td>
+                                        <td class="px-4 py-2 text-sm space-x-2">
+                                            <a href="{{ route('admin.interns.edit', $intern) }}" class="text-blue-600 hover:text-blue-900 font-semibold mr-2">
+                                                Edit
+                                            </a>
+                                            <form action="{{ route('admin.interns.destroy', $intern) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this intern? This will delete their checklists, logbooks, and user account.')" class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-900 font-semibold">
+                                                    Delete
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

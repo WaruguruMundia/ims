@@ -33,6 +33,8 @@ class InternDashboardTest extends TestCase
             'role_id' => $internRole->id,
             'is_active' => true,
         ]);
+        $user->email_verified_at = now();
+        $user->save();
 
         $intern = Intern::create([
             'user_id' => $user->id,
