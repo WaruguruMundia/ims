@@ -22,8 +22,8 @@ class UserSeeder extends Seeder
             ],
             [
                 'role_id'  => $roles['supervisor'],
-                'name'     => 'Jane Supervisor',
-                'email'    => 'supervisor@ims.test',
+                'name'     => 'Jane Wairimu',
+                'email'    => 'warugurumundia593@gmail',
                 'password' => Hash::make('Super@1234'),
                 'is_active' => true,
             ],
