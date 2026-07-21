@@ -1,8 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('My Onboarding') }}
-        </h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('My Onboarding & Dashboard') }}
+            </h2>
+            <div class="flex space-x-3 text-sm">
+                <a href="{{ route('intern.tasks.index') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition">
+                    My Tasks
+                </a>
+                <a href="{{ route('intern.logbook.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition">
+                    Digital Logbook
+                </a>
+            </div>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -117,6 +127,46 @@
                     @endif
                 </div>
             </div>
+
+            @if ($evaluation)
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border-l-4 border-green-500">
+                    <div class="p-6 space-y-6">
+                        <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-100 pb-2">
+                            My Performance Evaluation
+                        </h3>
+                        <p class="text-sm text-gray-600">
+                            Your supervisor has submitted your final performance evaluation. Here are your ratings and feedback:
+                        </p>
+
+                        <div class="space-y-4">
+                            @foreach ($evaluation->evaluationScores as $score)
+                                <div class="p-4 border border-gray-200 rounded-lg bg-gray-50 flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900">{{ $score->criteria?->name }}</h4>
+                                        <p class="text-xs text-gray-500 mt-0.5">{{ $score->criteria?->description }}</p>
+                                        @if ($score->comment)
+                                            <p class="mt-2 text-xs text-gray-600 italic">
+                                                "{{ $score->comment }}"
+                                            </p>
+                                        @endif
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-lg font-bold text-indigo-700">{{ $score->score }}</span>
+                                        <span class="text-xs text-gray-500">/ {{ $score->criteria?->max_score }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="border-t border-gray-150 pt-4">
+                            <h4 class="text-sm font-semibold text-gray-700 mb-2">Overall Feedback</h4>
+                            <p class="text-gray-600 text-sm bg-gray-50 p-4 rounded border border-gray-200 whitespace-pre-wrap">
+                                {{ $evaluation->overall_feedback }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            @endif
 
         </div>
     </div>

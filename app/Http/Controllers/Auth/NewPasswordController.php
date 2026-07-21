@@ -19,9 +19,17 @@ class NewPasswordController extends Controller
     /**
      * Display the password reset view.
      */
-    public function create(Request $request): View
+    public function create(Request $request): View|\Illuminate\Http\RedirectResponse
     {
-        return view('auth.reset-password', ['request' => $request]);
+        if (! $request->hasValidSignature()) {
+            return redirect()->route('password.request')
+                ->withErrors(['email' => __('The password reset link is invalid or has expired. Please request a new one.')]);
+        }
+
+        return view('auth.reset-password', [
+            'request' => $request,
+            'expires' => $request->query('expires'),
+        ]);
     }
 
     /**
@@ -46,6 +54,7 @@ class NewPasswordController extends Controller
                 $user->forceFill([
                     'password' => Hash::make($request->password),
                     'remember_token' => Str::random(60),
+                    'email_verified_at' => now(),
                 ])->save();
 
                 event(new PasswordReset($user));

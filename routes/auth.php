@@ -7,7 +7,7 @@ use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
-//use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\InternActivationController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Admin\ChecklistTemplateController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +23,18 @@ Route::middleware('guest')->group(function () {
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
+    Route::get('activate', [InternActivationController::class, 'showRequestForm'])
+        ->name('activate.request');
+
+    Route::post('activate', [InternActivationController::class, 'sendActivationLink'])
+        ->name('activate.send');
+
+    Route::get('activate/set-password/{email}', [InternActivationController::class, 'showPasswordForm'])
+        ->name('activate.reset');
+
+    Route::post('activate/set-password/{email}', [InternActivationController::class, 'completeActivation'])
+        ->name('activate.store');
+
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');
 
@@ -37,17 +49,16 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    // Email verification routes disabled as per requirements
-    // Route::get('verify-email', EmailVerificationPromptController::class)
-    //     ->name('verification.notice');
-    //
-    // Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
-    //     ->middleware(['signed', 'throttle:6,1'])
-    //     ->name('verification.verify');
-    //
-    // Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-    //     ->middleware('throttle:6,1')
-    //     ->name('verification.send');
+    Route::get('verify-email', EmailVerificationPromptController::class)
+        ->name('verification.notice');
+
+    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
+
+    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
 
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
         ->name('password.confirm');

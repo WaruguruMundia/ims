@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
@@ -40,6 +41,16 @@ class User extends Authenticatable
     public function role(): BelongsTo
     {
         return $this->belongsTo(\App\Models\Role::class, 'role_id');
+    }
+
+    public function supervisor(): HasOne
+    {
+        return $this->hasOne(Supervisor::class, 'user_id');
+    }
+
+    public function intern(): HasOne
+    {
+        return $this->hasOne(Intern::class, 'user_id');
     }
 
     // ── Role helpers ───────────────────────────────────────────

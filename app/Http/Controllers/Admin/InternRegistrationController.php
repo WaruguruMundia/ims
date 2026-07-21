@@ -75,4 +75,61 @@ class InternRegistrationController extends Controller
         return redirect()->route('admin.dashboard')
             ->with('status', "Intern registered. Account setup email sent to {$intern->user->email}.");
     }
+
+    public function edit(Intern $intern): View
+    {
+        $departments = Department::where('is_active', true)->orderBy('name')->get();
+        $supervisorRoleId = Role::where('slug', 'supervisor')->value('id');
+        $supervisors = User::where('role_id', $supervisorRoleId)->orderBy('name')->get();
+
+        return view('admin.interns.edit', compact('intern', 'departments', 'supervisors'));
+    }
+
+    public function update(Request $request, Intern $intern): RedirectResponse
+    {
+        $supervisorRoleId = Role::where('slug', 'supervisor')->value('id');
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', Rule::unique('t_users', 'email')->ignore($intern->user_id)],
+            'dept_id' => ['required', 'exists:t_departments,id'],
+            'supervisor_id' => [
+                'required',
+                Rule::exists('t_users', 'id')->where('role_id', $supervisorRoleId),
+            ],
+            'institution' => ['required', 'string', 'max:255'],
+            'programme' => ['required', 'string', 'max:255'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date', 'after:start_date'],
+        ]);
+
+        DB::transaction(function () use ($validated, $intern) {
+            $intern->user->update([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+            ]);
+
+            $intern->update([
+                'dept_id' => $validated['dept_id'],
+                'supervisor_id' => $validated['supervisor_id'],
+                'institution' => $validated['institution'],
+                'programme' => $validated['programme'],
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+            ]);
+        });
+
+        return redirect()->route('admin.dashboard')
+            ->with('status', "Intern details updated successfully.");
+    }
+
+    public function destroy(Intern $intern): RedirectResponse
+    {
+        DB::transaction(function () use ($intern) {
+            $intern->user->delete();
+        });
+
+        return redirect()->route('admin.dashboard')
+            ->with('status', "Intern deleted successfully.");
+    }
 }

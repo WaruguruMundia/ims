@@ -1,8 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Supervisee Onboarding') }}
-        </h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Supervisee Onboarding & Management') }}
+            </h2>
+            <a href="{{ route('supervisor.tasks.index') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded text-sm transition">
+                Task Management
+            </a>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -27,6 +32,7 @@
                                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Department</th>
                                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Progress</th>
                                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Required Complete</th>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
@@ -48,11 +54,17 @@
                                                 <span class="text-yellow-700">No</span>
                                             @endif
                                         </td>
+                                        <td class="px-4 py-2 text-sm space-x-3">
+                                            <a href="{{ route('supervisor.interns.logbook', $intern) }}" class="text-blue-600 hover:text-blue-900 font-semibold">Logbook</a>
+                                            <a href="{{ route('supervisor.tasks.create', ['intern_id' => $intern->id]) }}" class="text-indigo-600 hover:text-indigo-900 font-semibold">Assign Task</a>
+                                            <a href="{{ route('supervisor.evaluations.create', ['intern_id' => $intern->id]) }}" class="text-green-600 hover:text-green-900 font-semibold">Evaluate</a>
+                                            <a href="{{ route('shared.interns.report', $intern) }}" class="text-purple-600 hover:text-purple-900 font-semibold">Report</a>
+                                        </td>
                                     </tr>
 
                                     @foreach ($intern->onboardingChecklists as $item)
                                         <tr class="bg-gray-50">
-                                            <td colspan="2" class="px-8 py-2 text-sm text-gray-700">
+                                            <td colspan="3" class="px-8 py-2 text-sm text-gray-700">
                                                 {{ $item->item }}
                                             </td>
                                             <td class="px-4 py-2 text-sm">

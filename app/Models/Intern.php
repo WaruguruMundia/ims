@@ -53,6 +53,26 @@ class Intern extends Model
         return $this->hasMany(OnboardingChecklist::class, 'intern_id');
     }
 
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class, 'intern_id');
+    }
+
+    public function logbookEntries(): HasMany
+    {
+        return $this->hasMany(LogbookEntry::class, 'intern_id');
+    }
+
+    public function guestTokens(): HasMany
+    {
+        return $this->hasMany(GuestToken::class, 'intern_id');
+    }
+
+    public function evaluations(): HasMany
+    {
+        return $this->hasMany(Evaluation::class, 'intern_id');
+    }
+
     public function generateOnboardingChecklist(): void
     {
         $templates = ChecklistTemplate::query()

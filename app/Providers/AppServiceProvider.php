@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Models\Intern;
 use App\Observers\InternObserver;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,5 +29,17 @@ class AppServiceProvider extends ServiceProvider
             DB::statement('PRAGMA foreign_keys = ON;');
         }
         Intern::observe(InternObserver::class);
+
+        // Customize password reset URL to be a temporary signed route
+        ResetPassword::createUrlUsing(function ($notifiable, string $token) {
+            return URL::temporarySignedRoute(
+                'password.reset',
+                now()->addMinutes(config('auth.passwords.users.expire', 60)),
+                [
+                    'token' => $token,
+                    'email' => $notifiable->getEmailForPasswordReset(),
+                ]
+            );
+        });
     }
 }
