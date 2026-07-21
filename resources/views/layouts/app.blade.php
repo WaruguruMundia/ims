@@ -7,6 +7,28 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        <!-- Dark Mode Guard to prevent flash of light theme -->
+        <script>
+            if (localStorage.getItem('theme-dark') === 'true') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            
+            function toggleDarkMode() {
+                const isDark = document.documentElement.classList.contains('dark');
+                const newState = !isDark;
+                if (newState) {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme-dark', 'true');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme-dark', 'false');
+                }
+                window.dispatchEvent(new Event('theme-changed'));
+            }
+        </script>
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -16,6 +38,99 @@
         
         <!-- Chart.js CDN for interactive dashboard statistics -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <!-- Custom Dark & Modern Sleek Theme Styles -->
+        <style>
+            :root {
+                --theme-primary: #6366f1; /* electric indigo */
+                --theme-bg-sidebar: #ffffff;
+                --theme-bg-main: #f8fafc;
+                --theme-text-primary: #0f172a;
+            }
+
+            .dark {
+                --theme-primary: #a78bfa; /* lavender violet */
+                --theme-bg-sidebar: #0f172a; /* slate 900 */
+                --theme-bg-main: #030712; /* slate 955/black */
+                --theme-text-primary: #f8fafc;
+            }
+
+            .dark body {
+                background-color: var(--theme-bg-main) !important;
+                color: #cbd5e1 !important;
+            }
+            .dark aside {
+                background-color: var(--theme-bg-sidebar) !important;
+                border-color: #1e293b !important;
+            }
+            .dark .bg-white {
+                background-color: #0f172a !important;
+                color: #cbd5e1 !important;
+            }
+            .dark .text-gray-900 {
+                color: #f8fafc !important;
+            }
+            .dark .text-gray-800 {
+                color: #f1f5f9 !important;
+            }
+            .dark .text-gray-700 {
+                color: #94a3b8 !important;
+            }
+            .dark .text-gray-600, .dark .text-gray-650, .dark .text-gray-655 {
+                color: #94a3b8 !important;
+            }
+            .dark .text-gray-550, .dark .text-gray-500 {
+                color: #64748b !important;
+            }
+            .dark .border-gray-200, .dark .border-gray-100, .dark .border-gray-300 {
+                border-color: #1e293b !important;
+            }
+            .dark nav {
+                background-color: #0f172a !important;
+                border-color: #1e293b !important;
+            }
+            .dark header {
+                background-color: #0f172a !important;
+                border-color: #1e293b !important;
+            }
+            .dark .hover\:bg-gray-100:hover {
+                background-color: #1e293b !important;
+            }
+            .dark input, .dark select, .dark textarea {
+                background-color: #1e293b !important;
+                border-color: #334155 !important;
+                color: #f8fafc !important;
+            }
+            .dark .bg-gray-50 {
+                background-color: #1e293b !important;
+            }
+            .dark .bg-gray-100 {
+                background-color: #1e293b !important;
+            }
+            .dark .bg-gray-200 {
+                background-color: #334155 !important;
+            }
+            .dark td, .dark th {
+                color: #cbd5e1 !important;
+                border-color: #1e293b !important;
+            }
+            .dark .bg-indigo-50 {
+                background-color: #1e1b4b !important;
+                color: #a78bfa !important;
+            }
+            .dark .border-indigo-500 {
+                border-color: #a78bfa !important;
+            }
+            .dark .sidebar-link-text {
+                color: #cbd5e1 !important;
+            }
+            .dark a:hover .sidebar-link-text {
+                color: #f8fafc !important;
+            }
+            .dark .text-indigo-700 {
+                color: #c084fc !important;
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 flex flex-col">

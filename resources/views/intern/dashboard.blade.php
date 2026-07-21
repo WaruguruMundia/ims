@@ -68,34 +68,34 @@
                     </div>
                 </div>
 
-                <!-- Logbook Logging Streak Card -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border-l-4 border-orange-500">
-                    <div class="p-6 flex items-center justify-between">
+                <!-- Logbook Logging Streak Card (Enhanced Gradient Aesthetics) -->
+                <div class="bg-gradient-to-br from-orange-500 to-red-600 text-white overflow-hidden shadow-lg sm:rounded-lg border-none relative">
+                    <!-- Decorative background element -->
+                    <div class="absolute -right-6 -bottom-6 opacity-15 pointer-events-none select-none">
+                        <span class="text-[8rem]">🔥</span>
+                    </div>
+                    <div class="p-6 flex items-center justify-between relative z-10">
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">
+                            <h3 class="text-xs font-bold text-orange-100 uppercase tracking-widest">
                                 Daily Logging Streak
                             </h3>
                             @php
                                 $streak = $intern->logbookStreak();
                             @endphp
                             <div class="flex items-baseline mt-2 space-x-2">
-                                <span class="text-3xl font-extrabold text-orange-650">{{ $streak }}</span>
-                                <span class="text-gray-650 text-sm font-semibold">consecutive {{ Str::plural('day', $streak) }}</span>
+                                <span class="text-4xl font-extrabold tracking-tight drop-shadow">{{ $streak }}</span>
+                                <span class="text-orange-100 text-sm font-semibold">consecutive {{ Str::plural('day', $streak) }}</span>
                             </div>
-                            <p class="text-sm text-gray-550 mt-3">
+                            <p class="text-xs text-orange-50 mt-4 leading-relaxed font-semibold">
                                 @if($streak > 0)
-                                    🔥 Great job! Keep recording your logs daily to keep your streak alive!
+                                    ✨ Fantastic! Keep logging daily to keep your flame burning!
                                 @else
-                                    ⚡ No active streak. Record today's log entry to start your streak!
+                                    💤 No active streak. Submit a log entry today to start a new streak!
                                 @endif
                             </p>
                         </div>
-                        <div class="text-5xl">
-                            @if($streak > 0)
-                                🔥
-                            @else
-                                ⚡
-                            @endif
+                        <div class="text-6xl drop-shadow-[0_4px_10px_rgba(255,255,255,0.3)] animate-pulse">
+                            🔥
                         </div>
                     </div>
                 </div>
@@ -108,10 +108,16 @@
                         My Work Statistics
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-                        <!-- Chart container -->
+                        <!-- Chart container with centered total label -->
                         <div class="md:col-span-1 flex justify-center">
-                            <div class="w-48 h-48 relative">
-                                <canvas id="internStatsChart"></canvas>
+                            <div class="w-48 h-48 relative flex items-center justify-center">
+                                <canvas id="internStatsChart" class="absolute inset-0 z-10"></canvas>
+                                <div class="text-center z-0">
+                                    <div class="text-3xl font-black text-slate-800 dark:text-slate-100 leading-none">
+                                        {{ $tasksCount['completed'] + $tasksCount['in_progress'] + $tasksCount['pending'] }}
+                                    </div>
+                                    <div class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">Total Tasks</div>
+                                </div>
                             </div>
                         </div>
                         <!-- Statistics details -->
@@ -310,7 +316,7 @@
                                 {{ $tasksCount['in_progress'] }},
                                 {{ $tasksCount['pending'] }}
                             ],
-                            backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+                            backgroundColor: ['#10B981', '#6366F1', '#F43F5E'],
                             borderWidth: 1
                         }]
                     },
@@ -322,7 +328,7 @@
                                 display: false
                             }
                         },
-                        cutout: '70%'
+                        cutout: '76%'
                     }
                 });
             }
