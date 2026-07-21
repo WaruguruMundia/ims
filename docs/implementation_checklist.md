@@ -111,22 +111,23 @@ However, the remaining modules—**Task Management**,  **Digital Logbook**,  **P
 - [x] Create automated feature tests ([Phase1ModelsTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase1ModelsTest.php)) to verify Phase 1 models.  
 
 **Phase 2: Controllers & Web Routes**  
-- Define routes in [web.php:](file:///home/warugurumundia/ims/routes/web.php "file:///home/warugurumundia/ims/routes/web.php")  
-  - Under supervisor prefix:  
-    - tasks (resource controller for task assignment)  
-    - evaluations (resource controller for performance scoring)  
-    - interns/{intern}/logbook (view intern logbook entries)  
-  - Under intern prefix:  
-    - tasks (view assigned tasks, update status, submit deliverables)  
-    - logbook (index, create, store logbook entries)  
-  - Shared/Public:  
-    - /guest/logbooks/{token} (guest access read-only route)  
-- Create Controllers:  
-  - Supervisor\TaskController  
-  - Supervisor\EvaluationController  
-  - Intern\TaskController  
-  - Intern\LogbookController  
-  - GuestLogbookController  
+- [x] Define routes in [web.php](file:///home/warugurumundia/ims/routes/web.php):  
+  - [x] Under supervisor prefix:  
+    - [x] tasks (resource controller for task assignment)  
+    - [x] evaluations (resource controller for performance scoring)  
+    - [x] interns/{intern}/logbook (view intern logbook entries)  
+  - [x] Under intern prefix:  
+    - [x] tasks (view assigned tasks, update status, submit deliverables)  
+    - [x] logbook (index, create, store logbook entries)  
+  - [x] Shared/Public:  
+    - [x] /guest/logbooks/{token} (guest access read-only route)  
+- [x] Create Controllers:  
+  - [x] [Supervisor\TaskController](file:///home/warugurumundia/ims/app/Http/Controllers/Supervisor/TaskController.php)  
+  - [x] [Supervisor\EvaluationController](file:///home/warugurumundia/ims/app/Http/Controllers/Supervisor/EvaluationController.php)  
+  - [x] [Intern\TaskController](file:///home/warugurumundia/ims/app/Http/Controllers/Intern/TaskController.php)  
+  - [x] [Intern\LogbookController](file:///home/warugurumundia/ims/app/Http/Controllers/Intern/LogbookController.php)  
+  - [x] [GuestLogbookController](file:///home/warugurumundia/ims/app/Http/Controllers/GuestLogbookController.php)  
+- [x] Create automated feature tests ([Phase2RoutesTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase2RoutesTest.php)) to verify routing, RBAC boundaries, and validation correctness.  
 **Phase 3: Frontend Views & Workflows**  
 - **Task Management Views:**  
   - Supervisor task creation form (title, description, priority, due date, expected deliverables)  
