@@ -58,6 +58,7 @@
                                             <a href="{{ route('supervisor.interns.logbook', $intern) }}" class="text-blue-600 hover:text-blue-900 font-semibold">Logbook</a>
                                             <a href="{{ route('supervisor.tasks.create', ['intern_id' => $intern->id]) }}" class="text-indigo-600 hover:text-indigo-900 font-semibold">Assign Task</a>
                                             <a href="{{ route('supervisor.evaluations.create', ['intern_id' => $intern->id]) }}" class="text-green-600 hover:text-green-900 font-semibold">Evaluate</a>
+                                            <a href="{{ route('shared.interns.report', $intern) }}" class="text-purple-600 hover:text-purple-900 font-semibold">Report</a>
                                         </td>
                                     </tr>
 

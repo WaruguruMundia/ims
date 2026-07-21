@@ -12,6 +12,7 @@ use App\Http\Controllers\Supervisor\EvaluationController as SupervisorEvaluation
 use App\Http\Controllers\Intern\TaskController as InternTaskController;
 use App\Http\Controllers\Intern\LogbookController as InternLogbookController;
 use App\Http\Controllers\GuestLogbookController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -101,7 +102,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin,supervisor')
         ->name('shared.')
         ->group(function () {
-            // Routes accessible by both roles go here
+            Route::get('interns/{intern}/report', [ReportController::class, 'download'])
+                ->name('interns.report');
         });
 });
 

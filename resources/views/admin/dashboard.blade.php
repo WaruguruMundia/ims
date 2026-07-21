@@ -70,6 +70,9 @@
                                             @endif
                                         </td>
                                         <td class="px-4 py-2 text-sm space-x-2">
+                                            <a href="{{ route('shared.interns.report', $intern) }}" class="text-purple-600 hover:text-purple-900 font-semibold mr-2">
+                                                Report
+                                            </a>
                                             <a href="{{ route('admin.interns.edit', $intern) }}" class="text-blue-600 hover:text-blue-900 font-semibold mr-2">
                                                 Edit
                                             </a>

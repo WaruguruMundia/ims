@@ -143,19 +143,24 @@ However, the remaining modules—**Task Management**,  **Digital Logbook**,  **P
   - [x] Intern evaluation scorecard screen (displays final scores and overall feedback) - [intern/dashboard.blade.php](file:///home/warugurumundia/ims/resources/views/intern/dashboard.blade.php)  
 - [x] Create automated feature tests ([Phase3ViewsTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase3ViewsTest.php)) to verify Blade template compile and render outputs.  
 **Phase 4: Reporting & Notifications**  
-- Install PDF library (composer require barryvdh/laravel-dompdf)  
-- Create printable Blade template for the intern completion report ([completion_report.blade.php)](file:///home/warugurumundia/ims/resources/views/reports/completion_report.blade.php "file:///home/warugurumundia/ims/resources/views/reports/completion_report.blade.php")  
-- Create Admin\ReportController or Supervisor\ReportController with download action  
-- Implement Notification Classes:  
-  - TaskAssigned  
-  - TaskStatusUpdated  
-  - LogbookSubmitted  
-- Register Observers or Listener hooks to trigger notifications on model updates.  
+- [x] Install PDF library (`composer require barryvdh/laravel-dompdf`)  
+- [x] Create printable Blade template for the intern completion report - [completion_report.blade.php](file:///home/warugurumundia/ims/resources/views/reports/completion_report.blade.php)  
+- [x] Create shared [ReportController](file:///home/warugurumundia/ims/app/Http/Controllers/ReportController.php) with download action  
+- [x] Implement Notification Classes:  
+  - [x] [TaskAssigned](file:///home/warugurumundia/ims/app/Notifications/TaskAssigned.php)  
+  - [x] [TaskStatusUpdated](file:///home/warugurumundia/ims/app/Notifications/TaskStatusUpdated.php)  
+  - [x] [LogbookSubmitted](file:///home/warugurumundia/ims/app/Notifications/LogbookSubmitted.php)  
+- [x] Create custom notification delivery channel - [CustomDbChannel.php](file:///home/warugurumundia/ims/app/Channels/CustomDbChannel.php)  
+- [x] Register Observers to trigger notifications automatically:  
+  - [x] [TaskObserver](file:///home/warugurumundia/ims/app/Observers/TaskObserver.php) (notifies on creation and status changes)  
+  - [x] [LogbookEntryObserver](file:///home/warugurumundia/ims/app/Observers/LogbookEntryObserver.php) (notifies on new logs)  
+- [x] Create automated feature tests ([Phase4ReportingTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase4ReportingTest.php)) to verify notification flows and PDF downloads.  
+
 **Phase 5: Verification & Testing**  
-- Write Feature tests:  
-  - TaskManagementTest (verify task assignment, submission, approval workflows, and status constraints)  
-  - LogbookEntryTest (verify daily/weekly logging permissions and validations)  
-  - GuestTokenAccessTest (verify guest URL creation, expiry, and read-only permission checks)  
-  - PerformanceEvaluationTest (verify scoring validations and access boundaries)  
-  - CompletionReportTest (verify PDF rendering response)  
-- Run test suite (php artisan test) and verify 100% pass rate.  
+- [x] Write Feature tests:  
+  - [x] TaskManagementTest (verify task assignment, submission, approval workflows, and status constraints) - covered in [Phase5VerificationTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase5VerificationTest.php)  
+  - [x] LogbookEntryTest (verify daily/weekly logging permissions and validations) - covered in [Phase5VerificationTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase5VerificationTest.php)  
+  - [x] GuestTokenAccessTest (verify guest URL creation, expiry, and read-only permission checks) - covered in [Phase5VerificationTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase5VerificationTest.php)  
+  - [x] PerformanceEvaluationTest (verify scoring validations and access boundaries) - covered in [Phase5VerificationTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase5VerificationTest.php)  
+  - [x] CompletionReportTest (verify PDF rendering response) - covered in [Phase4ReportingTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase4ReportingTest.php)  
+- [x] Run test suite (`php artisan test`) and verify 100% pass rate.  
