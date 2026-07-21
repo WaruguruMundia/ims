@@ -117,102 +117,127 @@ class DummyDataSeeder extends Seeder
                 $supervisors[] = $supervisor;
             }
 
-            // 2. Create 1 Intern for each department
-            $firstName = $firstNames[$nameIndex % count($firstNames)];
-            $surname = $surnames[($nameIndex + 7) % count($surnames)];
-            $fullName = $firstName . ' ' . $surname;
-            $email = strtolower($firstName . '.' . $surname) . '@ims.test';
-            $nameIndex++;
+            // 2. Create 3 Interns per supervisor (total of 24 interns)
+            foreach ($supervisors as $supervisor) {
+                for ($k = 1; $k <= 3; $k++) {
+                    $firstName = $firstNames[$nameIndex % count($firstNames)];
+                    $surname = $surnames[($nameIndex + 7) % count($surnames)];
+                    $fullName = $firstName . ' ' . $surname;
+                    // Ensure unique email addresses by using supervisor ID and index
+                    $email = strtolower($firstName . '.' . $surname) . '_' . $supervisor->id . '_' . $k . '@ims.test';
+                    $nameIndex++;
 
-            $user = User::create([
-                'role_id' => $internRole->id,
-                'name' => $fullName,
-                'email' => $email,
-                'password' => Hash::make('Intern@1234'),
-                'is_active' => true,
-                'email_verified_at' => now(),
-            ]);
+                    $user = User::create([
+                        'role_id' => $internRole->id,
+                        'name' => $fullName,
+                        'email' => $email,
+                        'password' => Hash::make('Intern@1234'),
+                        'is_active' => true,
+                        'email_verified_at' => now(),
+                    ]);
 
-            $supervisor = $supervisors[0]; // Assign to the first supervisor
+                    $deptProgrammes = $programmes[$dept->code] ?? ['Bachelor of Business Administration'];
+                    $programme = $deptProgrammes[array_rand($deptProgrammes)];
+                    $university = $kenyanUniversities[array_rand($kenyanUniversities)];
 
-            $deptProgrammes = $programmes[$dept->code] ?? ['Bachelor of Business Administration'];
-            $programme = $deptProgrammes[array_rand($deptProgrammes)];
-            $university = $kenyanUniversities[array_rand($kenyanUniversities)];
+                    $intern = Intern::create([
+                        'user_id' => $user->id,
+                        'dept_id' => $dept->id,
+                        'supervisor_id' => $supervisor->user_id,
+                        'institution' => $university,
+                        'programme' => $programme,
+                        'student_number' => 'STD-' . $dept->code . '-' . rand(1000, 9999),
+                        'start_date' => now()->subDays(20),
+                        'end_date' => now()->addMonths(2),
+                        'is_active' => true,
+                    ]);
 
-            $intern = Intern::create([
-                'user_id' => $user->id,
-                'dept_id' => $dept->id,
-                'supervisor_id' => $supervisor->user_id,
-                'institution' => $university,
-                'programme' => $programme,
-                'student_number' => 'STD-' . $dept->code . '-' . rand(1000, 9999),
-                'start_date' => now()->subDays(15),
-                'end_date' => now()->addMonths(2),
-                'is_active' => true,
-            ]);
+                    // Initialize checklist
+                    app(OnboardingService::class)->initializeChecklist($intern);
 
-            // Initialize checklist
-            app(OnboardingService::class)->initializeChecklist($intern);
+                    // Complete a couple of checklist items to simulate progress
+                    $intern->onboardingChecklists->take(2)->each(function ($item) {
+                        $item->update([
+                            'is_completed' => true,
+                            'completed_at' => now()->subDays(15),
+                        ]);
+                    });
 
-            // Complete a couple of checklist items to simulate progress
-            $intern->onboardingChecklists->take(2)->each(function ($item) {
-                $item->update([
-                    'is_completed' => true,
-                    'completed_at' => now()->subDays(12),
-                ]);
-            });
+                    // 3. Create varying logbook entries to establish different streaks
+                    $activities = $activitiesPool[$dept->code] ?? ['Performed daily operations.'];
+                    
+                    if ($k === 1) {
+                        // Intern 1: 12-day streak (logs from subDays(11) to today)
+                        for ($day = 11; $day >= 0; $day--) {
+                            $entryDate = now()->subDays($day);
+                            LogbookEntry::create([
+                                'intern_id' => $intern->id,
+                                'entry_date' => $entryDate,
+                                'entry_type' => 'daily',
+                                'activities_performed' => $activities[$day % count($activities)],
+                            ]);
+                        }
+                    } elseif ($k === 2) {
+                        // Intern 2: 6-day streak (logs from subDays(5) to today)
+                        for ($day = 5; $day >= 0; $day--) {
+                            $entryDate = now()->subDays($day);
+                            LogbookEntry::create([
+                                'intern_id' => $intern->id,
+                                'entry_date' => $entryDate,
+                                'entry_type' => 'daily',
+                                'activities_performed' => $activities[$day % count($activities)],
+                            ]);
+                        }
+                    } else {
+                        // Intern 3: 0-day streak (logs recorded 5 and 4 days ago, leaving today & yesterday blank)
+                        for ($day = 5; $day >= 4; $day--) {
+                            $entryDate = now()->subDays($day);
+                            LogbookEntry::create([
+                                'intern_id' => $intern->id,
+                                'entry_date' => $entryDate,
+                                'entry_type' => 'daily',
+                                'activities_performed' => $activities[$day % count($activities)],
+                            ]);
+                        }
+                    }
 
-            // 3. Create 10 consecutive daily logbook entries to establish a streak
-            $activities = $activitiesPool[$dept->code] ?? ['Performed daily operations.'];
-            
-            for ($day = 9; $day >= 0; $day--) {
-                $entryDate = now()->subDays($day);
-                
-                LogbookEntry::create([
-                    'intern_id' => $intern->id,
-                    'entry_date' => $entryDate,
-                    'entry_type' => 'daily',
-                    'activities_performed' => $activities[$day % count($activities)],
-                    'challenges_encountered' => $day % 3 === 0 ? 'Encountered small blockers, resolved with team assistance.' : null,
-                    'skills_developed' => $day % 2 === 0 ? 'Improved system workflows and communication.' : null,
-                ]);
-            }
+                    // 4. Create tasks with various statuses
+                    foreach ($taskTemplates as $idx => $tmpl) {
+                        $status = 'pending';
+                        $submittedAt = null;
+                        $reviewedAt = null;
+                        $notes = null;
+                        $feedback = null;
 
-            // 4. Create tasks with various statuses
-            foreach ($taskTemplates as $idx => $tmpl) {
-                $status = 'pending';
-                $submittedAt = null;
-                $reviewedAt = null;
-                $notes = null;
-                $feedback = null;
+                        if ($idx === 0) {
+                            $status = 'approved'; // Closed / Resolved
+                            $submittedAt = now()->subDays(12);
+                            $reviewedAt = now()->subDays(11);
+                            $notes = 'Walked through all modules and verified checklist templates.';
+                            $feedback = 'Excellent job, confirmed correct understanding of systems.';
+                        } elseif ($idx === 1) {
+                            $status = 'submitted'; // Completed task pending review
+                            $submittedAt = now()->subDays(4);
+                            $notes = 'Environment fully configured, database tables populated successfully.';
+                        } elseif ($idx === 2) {
+                            $status = 'in_progress';
+                        }
 
-                if ($idx === 0) {
-                    $status = 'approved'; // Closed / Resolved task
-                    $submittedAt = now()->subDays(12);
-                    $reviewedAt = now()->subDays(11);
-                    $notes = 'Walked through all modules and verified checklist templates.';
-                    $feedback = 'Excellent job, confirmed correct understanding of systems.';
-                } elseif ($idx === 1) {
-                    $status = 'submitted'; // Completed task pending review
-                    $submittedAt = now()->subDays(4);
-                    $notes = 'Environment fully configured, database tables populated successfully.';
-                } elseif ($idx === 2) {
-                    $status = 'in_progress';
+                        Task::create([
+                            'intern_id' => $intern->id,
+                            'created_by' => $supervisor->user_id,
+                            'title' => $tmpl['title'],
+                            'description' => $tmpl['desc'],
+                            'priority' => ['high', 'medium', 'low'][$idx % 3],
+                            'status' => $status,
+                            'due_date' => now()->addDays(5 - $idx),
+                            'submission_notes' => $notes,
+                            'reviewer_feedback' => $feedback,
+                            'submitted_at' => $submittedAt,
+                            'reviewed_at' => $reviewedAt,
+                        ]);
+                    }
                 }
-
-                Task::create([
-                    'intern_id' => $intern->id,
-                    'created_by' => $supervisor->user_id,
-                    'title' => $tmpl['title'],
-                    'description' => $tmpl['desc'],
-                    'priority' => ['high', 'medium', 'low'][$idx % 3],
-                    'status' => $status,
-                    'due_date' => now()->addDays(5 - $idx),
-                    'submission_notes' => $notes,
-                    'reviewer_feedback' => $feedback,
-                    'submitted_at' => $submittedAt,
-                    'reviewed_at' => $reviewedAt,
-                ]);
             }
         }
     }
