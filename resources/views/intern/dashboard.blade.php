@@ -124,28 +124,36 @@
                         <div class="md:col-span-2 space-y-4">
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="bg-indigo-50 p-4 rounded border border-indigo-100 flex items-center space-x-3">
-                                    <span class="text-2xl">📔</span>
+                                    <svg class="w-6 h-6 text-teal-600 dark:text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
                                     <div>
                                         <div class="text-2xl font-extrabold text-indigo-750">{{ $logbookEntriesCount }}</div>
                                         <div class="text-xs text-indigo-650 font-bold uppercase">Logbook Entries</div>
                                     </div>
                                 </div>
                                 <div class="bg-green-50 p-4 rounded border border-green-100 flex items-center space-x-3">
-                                    <span class="text-2xl">✅</span>
+                                    <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
                                     <div>
                                         <div class="text-2xl font-extrabold text-green-750">{{ $tasksCount['completed'] }}</div>
                                         <div class="text-xs text-green-650 font-bold uppercase">Tasks Completed</div>
                                     </div>
                                 </div>
                                 <div class="bg-yellow-50 p-4 rounded border border-yellow-100 flex items-center space-x-3">
-                                    <span class="text-2xl">⏳</span>
+                                    <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H18.2" />
+                                    </svg>
                                     <div>
                                         <div class="text-2xl font-extrabold text-yellow-750">{{ $tasksCount['in_progress'] }}</div>
                                         <div class="text-xs text-yellow-650 font-bold uppercase">Tasks In Progress</div>
                                     </div>
                                 </div>
                                 <div class="bg-red-50 p-4 rounded border border-red-100 flex items-center space-x-3">
-                                    <span class="text-2xl">📋</span>
+                                    <svg class="w-6 h-6 text-rose-600 dark:text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
                                     <div>
                                         <div class="text-2xl font-extrabold text-red-750">{{ $tasksCount['pending'] }}</div>
                                         <div class="text-xs text-red-650 font-bold uppercase">Pending Tasks</div>
@@ -316,8 +324,11 @@
                                 {{ $tasksCount['in_progress'] }},
                                 {{ $tasksCount['pending'] }}
                             ],
-                            backgroundColor: ['#10B981', '#6366F1', '#F43F5E'],
-                            borderWidth: 1
+                            backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+                            borderWidth: 0,
+                            borderRadius: 8,
+                            spacing: 2,
+                            hoverOffset: 12
                         }]
                     },
                     options: {
