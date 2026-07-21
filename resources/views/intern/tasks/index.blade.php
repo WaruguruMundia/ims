@@ -55,7 +55,13 @@
                                                     @elseif($task->status === 'in_progress') bg-indigo-100 text-indigo-800
                                                     @elseif($task->status === 'rejected') bg-red-100 text-red-800
                                                     @else bg-gray-100 text-gray-800 @endif">
-                                                    {{ str_replace('_', ' ', ucfirst($task->status)) }}
+                                                    @if($task->status === 'approved')
+                                                        Closed / Resolved
+                                                    @elseif($task->status === 'submitted')
+                                                        Completed
+                                                    @else
+                                                        {{ str_replace('_', ' ', ucfirst($task->status)) }}
+                                                    @endif
                                                 </span>
                                             </td>
                                             <td class="px-4 py-2 text-sm text-gray-700">
@@ -66,7 +72,7 @@
                                                     @if($task->status === 'pending')
                                                         Start Task
                                                     @elseif($task->status === 'in_progress' || $task->status === 'rejected')
-                                                        Submit Deliverables
+                                                        Mark Complete
                                                     @else
                                                         View Details
                                                     @endif

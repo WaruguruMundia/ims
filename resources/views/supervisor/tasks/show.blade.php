@@ -33,7 +33,13 @@
                                 @elseif($task->status === 'in_progress') bg-indigo-100 text-indigo-800
                                 @elseif($task->status === 'rejected') bg-red-100 text-red-800
                                 @else bg-gray-100 text-gray-800 @endif">
-                                {{ str_replace('_', ' ', ucfirst($task->status)) }}
+                                @if($task->status === 'approved')
+                                    Closed / Resolved
+                                @elseif($task->status === 'submitted')
+                                    Completed
+                                @else
+                                    {{ str_replace('_', ' ', ucfirst($task->status)) }}
+                                @endif
                             </span>
                             <span class="text-xs text-gray-600">
                                 Due: <strong>{{ $task->due_date->format('Y-m-d') }}</strong>
@@ -105,7 +111,7 @@
 
                             <div class="flex space-x-3">
                                 <button type="submit" name="action" value="approve" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-950 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                    Approve & Complete Task
+                                    Close Task / Mark Resolved
                                 </button>
                                 <button type="submit" name="action" value="reject" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-950 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                     Return for Revision
