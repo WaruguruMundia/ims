@@ -41,7 +41,7 @@ class InternRegistrationController extends Controller
             ],
             'institution' => ['required', 'string', 'max:255'],
             'programme' => ['required', 'string', 'max:255'],
-            'start_date' => ['required', 'date'],
+            'start_date' => ['required', 'date', 'after_or_equal:today'],
             'end_date' => ['required', 'date', 'after:start_date'],
         ]);
 

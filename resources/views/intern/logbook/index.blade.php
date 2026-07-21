@@ -71,7 +71,12 @@
                                         <div>
                                             <span class="text-sm font-semibold text-gray-950">{{ $entry->entry_date->format('l, Y-m-d') }}</span>
                                         </div>
-                                        <div>
+                                        <div class="flex items-center space-x-2">
+                                            @if ($entry->entry_date->isToday())
+                                                <a href="{{ route('intern.logbook.edit', $entry) }}" class="text-xs bg-indigo-55 text-indigo-700 hover:bg-indigo-100 px-2.5 py-1 rounded font-bold border border-indigo-200 transition">
+                                                    Edit Log
+                                                </a>
+                                            @endif
                                             <span class="px-2 py-0.5 rounded text-xs font-semibold uppercase
                                                 @if($entry->entry_type === 'weekly') bg-purple-100 text-purple-800
                                                 @else bg-green-100 text-green-800 @endif">

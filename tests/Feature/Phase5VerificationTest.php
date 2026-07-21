@@ -235,4 +235,26 @@ class Phase5VerificationTest extends TestCase
             'score' => 8,
         ]);
     }
+
+    /**
+     * Test Intern Date Validation: Admin cannot register intern with past start date.
+     */
+    public function test_admin_cannot_register_intern_with_past_start_date(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $this->actingAs($admin)
+            ->postJson(route('admin.interns.store'), [
+                'name' => 'John Doe',
+                'email' => 'john.doe@example.com',
+                'dept_id' => $this->intern->dept_id,
+                'supervisor_id' => $this->supervisorUser->id,
+                'institution' => 'Test Uni',
+                'programme' => 'Test Course',
+                'start_date' => now()->subDay()->format('Y-m-d'), // past date
+                'end_date' => now()->addMonths(3)->format('Y-m-d'),
+            ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['start_date']);
+    }
 }
