@@ -27,8 +27,20 @@
                     $greeting = 'Good evening';
                 }
             @endphp
-            <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded text-indigo-900 text-sm font-semibold shadow-sm">
-                👋 {{ $greeting }}, {{ Auth::user()->name }}! Welcome to your onboarding dashboard.
+            <div class="bg-gradient-to-r from-teal-100 to-emerald-100 dark:from-slate-900 dark:to-slate-850 border border-teal-200 dark:border-slate-800 border-l-4 border-l-teal-500 p-6 rounded-xl shadow-md flex items-center space-x-4">
+                <div class="p-3 bg-teal-100 dark:bg-slate-800 rounded-lg">
+                    <svg class="w-7 h-7 text-teal-600 dark:text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-extrabold text-teal-700 dark:text-teal-400 tracking-tight">
+                        {{ $greeting }}, {{ Auth::user()->name }}!
+                    </h3>
+                    <p class="text-sm text-teal-700 dark:text-teal-400 mt-1 font-medium">
+                        Welcome to your onboarding dashboard. Let's record digital logs and accomplish tasks.
+                    </p>
+                </div>
             </div>
 
             @if (session('status'))
