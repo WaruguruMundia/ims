@@ -93,7 +93,7 @@ Route::middleware('auth')->group(function () {
                 ->only(['index', 'show', 'update']);
 
             Route::resource('logbook', InternLogbookController::class)
-                ->only(['index', 'create', 'store']);
+                ->only(['index', 'create', 'store', 'edit', 'update']);
             Route::post('logbook/generate-token', [InternLogbookController::class, 'generateToken'])
                 ->name('logbook.generate-token');
         });

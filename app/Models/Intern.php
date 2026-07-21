@@ -121,4 +121,44 @@ class Intern extends Model
             ->where('is_completed', false)
             ->exists();
     }
+
+    /**
+     * Calculate the current daily logging streak.
+     */
+    public function logbookStreak(): int
+    {
+        $dates = $this->logbookEntries()
+            ->orderBy('entry_date', 'desc')
+            ->pluck('entry_date')
+            ->map(fn($date) => $date->format('Y-m-d'))
+            ->unique()
+            ->values();
+
+        if ($dates->isEmpty()) {
+            return 0;
+        }
+
+        $today = now()->format('Y-m-d');
+        $yesterday = now()->subDay()->format('Y-m-d');
+
+        $latest = $dates->first();
+        if ($latest !== $today && $latest !== $yesterday) {
+            return 0;
+        }
+
+        $streak = 0;
+        $currentCheckDate = now()->parse($latest);
+
+        foreach ($dates as $dateStr) {
+            $date = now()->parse($dateStr);
+            if ($date->equalTo($currentCheckDate)) {
+                $streak++;
+                $currentCheckDate->subDay();
+            } else {
+                break;
+            }
+        }
+
+        return $streak;
+    }
 }
