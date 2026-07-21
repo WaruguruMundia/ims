@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class EvaluationController extends Controller
@@ -82,7 +83,7 @@ class EvaluationController extends Controller
         $validatedScores = [];
         foreach ($request->scores as $criteriaId => $scoreData) {
             if (!$criteriaList->has($criteriaId)) {
-                return back()->withErrors(["scores.{$criteriaId}" => "Invalid competency criterion selection."])->withInput();
+                throw ValidationException::withMessages(["scores.{$criteriaId}" => "Invalid competency criterion selection."]);
             }
 
             $criterion = $criteriaList->get($criteriaId);
@@ -90,7 +91,7 @@ class EvaluationController extends Controller
 
             $validatedScore = filter_var($scoreData['score'] ?? null, FILTER_VALIDATE_INT);
             if ($validatedScore === false || $validatedScore < 0 || $validatedScore > $maxScore) {
-                return back()->withErrors(["scores.{$criteriaId}.score" => "The score for '{$criterion->name}' must be an integer between 0 and {$maxScore}."])->withInput();
+                throw ValidationException::withMessages(["scores.{$criteriaId}.score" => "The score for '{$criterion->name}' must be an integer between 0 and {$maxScore}."]);
             }
 
             $validatedScores[] = [

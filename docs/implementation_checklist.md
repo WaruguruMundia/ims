@@ -169,6 +169,28 @@ An audit of the codebase reveals that the foundational structure is set up:
     - [x] PerformanceEvaluationTest (verify scoring validations and access boundaries) - covered in [Phase5VerificationTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase5VerificationTest.php)
     - [x] CompletionReportTest (verify PDF rendering response) - covered in [Phase4ReportingTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase4ReportingTest.php)
 - [x] Run test suite (`php artisan test`) and verify 100% pass rate.
+**Phase 4: Reporting & Notifications**  
+- [x] Install PDF library (`composer require barryvdh/laravel-dompdf`)  
+- [x] Create printable Blade template for the intern completion report - [completion_report.blade.php](file:///home/warugurumundia/ims/resources/views/reports/completion_report.blade.php)  
+- [x] Create shared [ReportController](file:///home/warugurumundia/ims/app/Http/Controllers/ReportController.php) with download action  
+- [x] Implement Notification Classes:  
+  - [x] [TaskAssigned](file:///home/warugurumundia/ims/app/Notifications/TaskAssigned.php)  
+  - [x] [TaskStatusUpdated](file:///home/warugurumundia/ims/app/Notifications/TaskStatusUpdated.php)  
+  - [x] [LogbookSubmitted](file:///home/warugurumundia/ims/app/Notifications/LogbookSubmitted.php)  
+- [x] Create custom notification delivery channel - [CustomDbChannel.php](file:///home/warugurumundia/ims/app/Channels/CustomDbChannel.php)  
+- [x] Register Observers to trigger notifications automatically:  
+  - [x] [TaskObserver](file:///home/warugurumundia/ims/app/Observers/TaskObserver.php) (notifies on creation and status changes)  
+  - [x] [LogbookEntryObserver](file:///home/warugurumundia/ims/app/Observers/LogbookEntryObserver.php) (notifies on new logs)  
+- [x] Create automated feature tests ([Phase4ReportingTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase4ReportingTest.php)) to verify notification flows and PDF downloads.  
+
+**Phase 5: Verification & Testing**  
+- [x] Write Feature tests:  
+  - [x] TaskManagementTest (verify task assignment, submission, approval workflows, and status constraints) - covered in [Phase5VerificationTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase5VerificationTest.php)  
+  - [x] LogbookEntryTest (verify daily/weekly logging permissions and validations) - covered in [Phase5VerificationTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase5VerificationTest.php)  
+  - [x] GuestTokenAccessTest (verify guest URL creation, expiry, and read-only permission checks) - covered in [Phase5VerificationTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase5VerificationTest.php)  
+  - [x] PerformanceEvaluationTest (verify scoring validations and access boundaries) - covered in [Phase5VerificationTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase5VerificationTest.php)  
+  - [x] CompletionReportTest (verify PDF rendering response) - covered in [Phase4ReportingTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase4ReportingTest.php)  
+- [x] Run test suite (`php artisan test`) and verify 100% pass rate.  
 
 ---
 
@@ -179,5 +201,10 @@ An audit of the codebase reveals that the foundational structure is set up:
 - [x] **Views:**
     - [x] Activation Link Request Form: [activate-request.blade.php](file:///home/warugurumundia/ims/resources/views/auth/activate-request.blade.php)
     - [x] Password Setup Form: [activate-set-password.blade.php](file:///home/warugurumundia/ims/resources/views/auth/activate-set-password.blade.php)
+- [x] **Controller:** [InternActivationController](file:///home/warugurumundia/ims/app/Http/Controllers/Auth/InternActivationController.php) (securely verifies email using temporary signed links and sets password)
+- [x] **Notification:** [InternActivationNotification](file:///home/warugurumundia/ims/app/Notifications/InternActivationNotification.php) (sends signed URL activation links to pre-registered emails)
+- [x] **Views:**
+  - [x] Activation Link Request Form: [activate-request.blade.php](file:///home/warugurumundia/ims/resources/views/auth/activate-request.blade.php)
+  - [x] Password Setup Form: [activate-set-password.blade.php](file:///home/warugurumundia/ims/resources/views/auth/activate-set-password.blade.php)
 - [x] **Routing & Discovery:** Registered routes in [routes/auth.php](file:///home/warugurumundia/ims/routes/auth.php) and added link to the login screen [login.blade.php](file:///home/warugurumundia/ims/resources/views/auth/login.blade.php)
 - [x] **Testing:** Created automated feature tests [InternActivationTest.php](file:///home/warugurumundia/ims/tests/Feature/InternActivationTest.php) validating requests, signature security boundaries, and successful password registrations.

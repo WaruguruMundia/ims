@@ -11,7 +11,20 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            @php
+                $hour = now()->hour;
+                if ($hour < 12) {
+                    $greeting = 'Good morning';
+                } elseif ($hour < 18) {
+                    $greeting = 'Good afternoon';
+                } else {
+                    $greeting = 'Good evening';
+                }
+            @endphp
+            <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded text-indigo-900 text-sm font-semibold shadow-sm">
+                👋 {{ $greeting }}, {{ Auth::user()->name }}! Welcome to your supervisor dashboard.
+            </div>
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
@@ -38,8 +51,13 @@
                                 <tbody class="divide-y divide-gray-200">
                                 @foreach ($interns as $intern)
                                     <tr>
-                                        <td class="px-4 py-2 text-sm text-gray-900">
-                                            {{ $intern->user?->name }}
+                                        <td class="px-4 py-2 text-sm text-gray-900 flex items-center">
+                                            <button onclick="toggleChecklistRows({{ $intern->id }})" class="mr-2 focus:outline-none text-gray-500 hover:text-gray-700 flex items-center" type="button">
+                                                <svg id="chevron-{{ $intern->id }}" class="w-4 h-4 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                                </svg>
+                                            </button>
+                                            <span>{{ $intern->user?->name }}</span>
                                         </td>
                                         <td class="px-4 py-2 text-sm text-gray-700">
                                             {{ $intern->department?->name ?? '-' }}
@@ -58,11 +76,12 @@
                                             <a href="{{ route('supervisor.interns.logbook', $intern) }}" class="text-blue-600 hover:text-blue-900 font-semibold">Logbook</a>
                                             <a href="{{ route('supervisor.tasks.create', ['intern_id' => $intern->id]) }}" class="text-indigo-600 hover:text-indigo-900 font-semibold">Assign Task</a>
                                             <a href="{{ route('supervisor.evaluations.create', ['intern_id' => $intern->id]) }}" class="text-green-600 hover:text-green-900 font-semibold">Evaluate</a>
+                                            <a href="{{ route('shared.interns.report', $intern) }}" class="text-purple-600 hover:text-purple-900 font-semibold">Report</a>
                                         </td>
                                     </tr>
 
                                     @foreach ($intern->onboardingChecklists as $item)
-                                        <tr class="bg-gray-50">
+                                        <tr class="bg-gray-50 intern-checklist-{{ $intern->id }} hidden">
                                             <td colspan="3" class="px-8 py-2 text-sm text-gray-700">
                                                 {{ $item->item }}
                                             </td>
@@ -104,4 +123,18 @@
 
         </div>
     </div>
+    <script>
+        function toggleChecklistRows(internId) {
+            const rows = document.querySelectorAll('.intern-checklist-' + internId);
+            const chevron = document.getElementById('chevron-' + internId);
+            
+            rows.forEach(row => {
+                row.classList.toggle('hidden');
+            });
+            
+            if (chevron) {
+                chevron.classList.toggle('rotate-90');
+            }
+        }
+    </script>
 </x-app-layout>

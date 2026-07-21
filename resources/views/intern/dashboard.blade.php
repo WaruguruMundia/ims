@@ -17,6 +17,19 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            @php
+                $hour = now()->hour;
+                if ($hour < 12) {
+                    $greeting = 'Good morning';
+                } elseif ($hour < 18) {
+                    $greeting = 'Good afternoon';
+                } else {
+                    $greeting = 'Good evening';
+                }
+            @endphp
+            <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded text-indigo-900 text-sm font-semibold shadow-sm">
+                👋 {{ $greeting }}, {{ Auth::user()->name }}! Welcome to your onboarding dashboard.
+            </div>
 
             @if (session('status'))
                 <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded">
@@ -24,48 +37,92 @@
                 </div>
             @endif
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <h3 class="text-lg font-semibold text-gray-900">
-                        Onboarding Progress
-                    </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Onboarding Progress Card -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-gray-900">
+                            Onboarding Progress
+                        </h3>
 
-                    <p class="mt-2 text-gray-700">
-                        {{ $intern->onboardingProgressPercentage() }}% complete
-                    </p>
+                        <p class="mt-2 text-gray-700">
+                            {{ $intern->onboardingProgressPercentage() }}% complete
+                        </p>
 
-                    <div class="mt-4 w-full bg-gray-200 rounded-full h-3">
-                        <div
-                            class="bg-blue-600 h-3 rounded-full"
-                            style="width: {{ $intern->onboardingProgressPercentage() }}%"
-                        ></div>
+                        <div class="mt-4 w-full bg-gray-200 rounded-full h-3">
+                            <div
+                                class="bg-blue-600 h-3 rounded-full"
+                                style="width: {{ $intern->onboardingProgressPercentage() }}%"
+                            ></div>
+                        </div>
+
+                        @if ($intern->hasCompletedRequiredOnboarding())
+                            <p class="mt-3 text-green-700">
+                                All required onboarding items are complete.
+                            </p>
+                        @else
+                            <p class="mt-3 text-yellow-700">
+                                Some required onboarding items are still pending.
+                            </p>
+                        @endif
                     </div>
+                </div>
 
-                    @if ($intern->hasCompletedRequiredOnboarding())
-                        <p class="mt-3 text-green-700">
-                            All required onboarding items are complete.
-                        </p>
-                    @else
-                        <p class="mt-3 text-yellow-700">
-                            Some required onboarding items are still pending.
-                        </p>
-                    @endif
+                <!-- Logbook Logging Streak Card -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border-l-4 border-orange-500">
+                    <div class="p-6 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                Daily Logging Streak
+                            </h3>
+                            @php
+                                $streak = $intern->logbookStreak();
+                            @endphp
+                            <div class="flex items-baseline mt-2 space-x-2">
+                                <span class="text-3xl font-extrabold text-orange-650">{{ $streak }}</span>
+                                <span class="text-gray-650 text-sm font-semibold">consecutive {{ Str::plural('day', $streak) }}</span>
+                            </div>
+                            <p class="text-sm text-gray-550 mt-3">
+                                @if($streak > 0)
+                                    🔥 Great job! Keep recording your logs daily to keep your streak alive!
+                                @else
+                                    ⚡ No active streak. Record today's log entry to start your streak!
+                                @endif
+                            </p>
+                        </div>
+                        <div class="text-5xl">
+                            @if($streak > 0)
+                                🔥
+                            @else
+                                ⚡
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
-                        My Checklist
-                    </h3>
+                    <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleElement('intern-checklist-container')">
+                        <h3 class="text-lg font-semibold text-gray-900">
+                            My Checklist
+                        </h3>
+                        <button class="text-gray-500 hover:text-gray-700 focus:outline-none flex items-center">
+                            <span id="intern-checklist-container-toggle-text" class="text-sm mr-1">Hide</span>
+                            <svg id="intern-checklist-container-icon" class="w-5 h-5 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </div>
 
-                    @if ($intern->onboardingChecklists->isEmpty())
-                        <p class="text-gray-600">
-                            No onboarding checklist items have been assigned yet.
-                        </p>
-                    @else
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
+                    <div id="intern-checklist-container" class="transition-all duration-350">
+                        @if ($intern->onboardingChecklists->isEmpty())
+                            <p class="text-gray-600">
+                                No onboarding checklist items have been assigned yet.
+                            </p>
+                        @else
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
                                 <thead>
                                 <tr>
                                     <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Item</th>
@@ -125,6 +182,7 @@
                             </table>
                         </div>
                     @endif
+                    </div>
                 </div>
             </div>
 
@@ -170,4 +228,22 @@
 
         </div>
     </div>
+
+    <script>
+        function toggleElement(id) {
+            const container = document.getElementById(id);
+            const toggleText = document.getElementById(id + '-toggle-text');
+            const icon = document.getElementById(id + '-icon');
+            
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                if (toggleText) toggleText.textContent = 'Hide';
+                if (icon) icon.classList.remove('rotate-180');
+            } else {
+                container.classList.add('hidden');
+                if (toggleText) toggleText.textContent = 'Show';
+                if (icon) icon.classList.add('rotate-180');
+            }
+        }
+    </script>
 </x-app-layout>

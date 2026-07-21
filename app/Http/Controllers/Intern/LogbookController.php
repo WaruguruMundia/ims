@@ -91,4 +91,50 @@ class LogbookController extends Controller
         return redirect()->route('intern.logbook.index')
             ->with('status', 'New guest access link generated.');
     }
+
+    /**
+     * Show the form for editing a logbook entry.
+     */
+    public function edit(LogbookEntry $logbook): View
+    {
+        $intern = Intern::where('user_id', Auth::id())->firstOrFail();
+
+        if ($logbook->intern_id !== $intern->id) {
+            abort(403, 'Unauthorized.');
+        }
+
+        if (!$logbook->entry_date->isToday()) {
+            abort(403, 'Only logbook entries recorded for today can be edited.');
+        }
+
+        return view('intern.logbook.edit', compact('logbook'));
+    }
+
+    /**
+     * Update a logbook entry.
+     */
+    public function update(Request $request, LogbookEntry $logbook): RedirectResponse
+    {
+        $intern = Intern::where('user_id', Auth::id())->firstOrFail();
+
+        if ($logbook->intern_id !== $intern->id) {
+            abort(403, 'Unauthorized.');
+        }
+
+        if (!$logbook->entry_date->isToday()) {
+            abort(403, 'Only logbook entries recorded for today can be updated.');
+        }
+
+        $validated = $request->validate([
+            'entry_type' => ['required', 'in:daily,weekly'],
+            'activities_performed' => ['required', 'string'],
+            'challenges_encountered' => ['nullable', 'string'],
+            'skills_developed' => ['nullable', 'string'],
+        ]);
+
+        $logbook->update($validated);
+
+        return redirect()->route('intern.logbook.index')
+            ->with('status', 'Logbook entry updated successfully.');
+    }
 }

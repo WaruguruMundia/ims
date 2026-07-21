@@ -33,7 +33,13 @@
                                 @elseif($task->status === 'in_progress') bg-indigo-100 text-indigo-800
                                 @elseif($task->status === 'rejected') bg-red-100 text-red-800
                                 @else bg-gray-100 text-gray-800 @endif">
-                                {{ str_replace('_', ' ', ucfirst($task->status)) }}
+                                @if($task->status === 'approved')
+                                    Closed / Resolved
+                                @elseif($task->status === 'submitted')
+                                    Completed
+                                @else
+                                    {{ str_replace('_', ' ', ucfirst($task->status)) }}
+                                @endif
                             </span>
                             <span class="text-xs text-gray-600">
                                 Due: <strong>{{ $task->due_date->format('Y-m-d') }}</strong>
@@ -103,7 +109,7 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-100 pb-3 mb-4">
-                            Submit Deliverables
+                            Mark Task as Complete
                         </h3>
 
                         <form method="POST" action="{{ route('intern.tasks.update', $task) }}" class="space-y-4">
@@ -112,14 +118,14 @@
                             <input type="hidden" name="status" value="submitted">
 
                             <div>
-                                <x-input-label for="submission_notes" :value="__('Submission Comments / Deliverables Info')" />
-                                <textarea id="submission_notes" name="submission_notes" rows="4" placeholder="Provide link to code repository, document, or explain completed work..." class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>{{ old('submission_notes', $task->submission_notes) }}</textarea>
+                                <x-input-label for="submission_notes" :value="__('Completion Notes / Deliverables')" />
+                                <textarea id="submission_notes" name="submission_notes" rows="4" placeholder="Describe the work done or paste links to code, documents, or deliverables..." class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>{{ old('submission_notes', $task->submission_notes) }}</textarea>
                                 <x-input-error :messages="$errors->get('submission_notes')" class="mt-2" />
                             </div>
 
                             <div>
-                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition">
-                                    Submit Deliverables
+                                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition">
+                                    Mark as Complete
                                 </button>
                             </div>
                         </form>

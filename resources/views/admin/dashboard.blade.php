@@ -7,6 +7,19 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            @php
+                $hour = now()->hour;
+                if ($hour < 12) {
+                    $greeting = 'Good morning';
+                } elseif ($hour < 18) {
+                    $greeting = 'Good afternoon';
+                } else {
+                    $greeting = 'Good evening';
+                }
+            @endphp
+            <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded text-indigo-900 text-sm font-semibold shadow-sm">
+                👋 {{ $greeting }}, {{ Auth::user()->name }}! Welcome to your admin dashboard.
+            </div>
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 flex items-center justify-between">
@@ -70,6 +83,9 @@
                                             @endif
                                         </td>
                                         <td class="px-4 py-2 text-sm space-x-2">
+                                            <a href="{{ route('shared.interns.report', $intern) }}" class="text-purple-600 hover:text-purple-900 font-semibold mr-2">
+                                                Report
+                                            </a>
                                             <a href="{{ route('admin.interns.edit', $intern) }}" class="text-blue-600 hover:text-blue-900 font-semibold mr-2">
                                                 Edit
                                             </a>
