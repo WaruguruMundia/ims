@@ -7,6 +7,11 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\SupervisorDashboardController;
 use App\Http\Controllers\InternDashboardController;
 use App\Http\Controllers\OnboardingChecklistController;
+use App\Http\Controllers\Supervisor\TaskController as SupervisorTaskController;
+use App\Http\Controllers\Supervisor\EvaluationController as SupervisorEvaluationController;
+use App\Http\Controllers\Intern\TaskController as InternTaskController;
+use App\Http\Controllers\Intern\LogbookController as InternLogbookController;
+use App\Http\Controllers\GuestLogbookController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -64,7 +69,15 @@ Route::middleware('auth')->group(function () {
             Route::get('/dashboard', [SupervisorDashboardController::class, 'index'])
                 ->name('dashboard');
 
-            // Task review, evaluations — added here
+            Route::resource('tasks', SupervisorTaskController::class);
+            Route::post('tasks/{task}/review', [SupervisorTaskController::class, 'review'])
+                ->name('tasks.review');
+
+            Route::resource('evaluations', SupervisorEvaluationController::class)
+                ->except(['index', 'destroy']);
+
+            Route::get('interns/{intern}/logbook', [SupervisorDashboardController::class, 'logbook'])
+                ->name('interns.logbook');
         });
 
     // ── Intern ─────────────────────────────────────────────────
@@ -75,7 +88,13 @@ Route::middleware('auth')->group(function () {
             Route::get('/dashboard', [InternDashboardController::class, 'index'])
                 ->name('dashboard');
 
-            // Task updates, logbook entries — added here
+            Route::resource('tasks', InternTaskController::class)
+                ->only(['index', 'show', 'update']);
+
+            Route::resource('logbook', InternLogbookController::class)
+                ->only(['index', 'create', 'store']);
+            Route::post('logbook/generate-token', [InternLogbookController::class, 'generateToken'])
+                ->name('logbook.generate-token');
         });
 
     // ── Shared (admin + supervisor) ────────────────────────────
@@ -85,3 +104,7 @@ Route::middleware('auth')->group(function () {
             // Routes accessible by both roles go here
         });
 });
+
+// ── Public Guest Access (No auth required) ───────────────────
+Route::get('/guest/logbooks/{token}', [GuestLogbookController::class, 'show'])
+    ->name('guest.logbooks.show');

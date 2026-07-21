@@ -16,4 +16,16 @@ class SupervisorDashboardController extends Controller
 
         return view('supervisor.dashboard', compact('interns'));
     }
+
+    public function logbook(Intern $intern): View
+    {
+        if ($intern->supervisor_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $intern->load(['user', 'department']);
+        $entries = $intern->logbookEntries()->orderBy('entry_date', 'desc')->get();
+
+        return view('supervisor.logbook', compact('intern', 'entries'));
+    }
 }
