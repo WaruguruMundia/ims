@@ -43,3 +43,4 @@ class InternProfileSeeder extends Seeder
         );
     }
 }
+
