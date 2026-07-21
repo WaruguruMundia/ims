@@ -73,12 +73,12 @@
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
-                            <input type="date" name="start_date" value="{{ old('start_date') }}"
+                            <input type="date" name="start_date" min="{{ date('Y-m-d') }}" value="{{ old('start_date') }}"
                                    class="w-full rounded border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
-                            <input type="date" name="end_date" value="{{ old('end_date') }}"
+                            <input type="date" name="end_date" min="{{ date('Y-m-d') }}" value="{{ old('end_date') }}"
                                    class="w-full rounded border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                         </div>
                     </div>
@@ -91,4 +91,19 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startDateInput = document.querySelector('input[name="start_date"]');
+            const endDateInput = document.querySelector('input[name="end_date"]');
+            
+            startDateInput.addEventListener('change', function() {
+                if (startDateInput.value) {
+                    endDateInput.min = startDateInput.value;
+                } else {
+                    endDateInput.min = "{{ date('Y-m-d') }}";
+                }
+            });
+        });
+    </script>
 </x-app-layout>
