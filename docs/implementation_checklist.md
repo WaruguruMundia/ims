@@ -86,27 +86,30 @@ However, the remaining modules—**Task Management**,  **Digital Logbook**,  **P
 ![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAnEAAAACCAYAAAA3pIp+AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAANklEQVR4nO3OMQ2AABAAsSNhYMEBIpD4ArCJDyywEZJWQZeZOaorAAD+4l6rrTq/ngAA8Nr+AEqmA1hl45m5AAAAAElFTkSuQmCC)  
 **3. Implementation Checklist**  
 **Phase 1: Models & Core Relations**  
-- Create Task model ([Task.php):](file:///home/warugurumundia/ims/app/Models/Task.php "file:///home/warugurumundia/ims/app/Models/Task.php")  
-  - Define relation to Intern (belongsTo)  
-  - Define relation to User as creator (belongsTo)  
-  - Add casts for due_date (date), submitted_at (datetime), and reviewed_at (datetime)  
-- Create LogbookEntry model ([LogbookEntry.php):](file:///home/warugurumundia/ims/app/Models/LogbookEntry.php "file:///home/warugurumundia/ims/app/Models/LogbookEntry.php")  
-  - Define relation to Intern (belongsTo)  
-  - Add cast for entry_date (date)  
-- Create GuestToken model ([GuestToken.php):](file:///home/warugurumundia/ims/app/Models/GuestToken.php "file:///home/warugurumundia/ims/app/Models/GuestToken.php")  
-  - Define relation to Intern (belongsTo) and User as generator (belongsTo)  
-  - Add casts for expires_at (datetime) and is_revoked (boolean)  
-  - Implement query scopes to filter valid/non-expired tokens  
-- Create Evaluation Models:  
-  - CompetencyCriteria model ([CompetencyCriteria.php)](file:///home/warugurumundia/ims/app/Models/CompetencyCriteria.php "file:///home/warugurumundia/ims/app/Models/CompetencyCriteria.php")  
-  - Evaluation model ([Evaluation.php) referencing t_supervisors table](file:///home/warugurumundia/ims/app/Models/Evaluation.php "file:///home/warugurumundia/ims/app/Models/Evaluation.php")  
-  - EvaluationScore model ([EvaluationScore.php)](file:///home/warugurumundia/ims/app/Models/EvaluationScore.php "file:///home/warugurumundia/ims/app/Models/EvaluationScore.php")  
-- Create Supervisor model ([Supervisor.php):](file:///home/warugurumundia/ims/app/Models/Supervisor.php "file:///home/warugurumundia/ims/app/Models/Supervisor.php")  
-  - Define relation to User (belongsTo)  
-  - Define relation to Department (belongsTo)  
-  - Define relation to Evaluation (hasMany)  
-- Create Notification model ([Notification.php):](file:///home/warugurumundia/ims/app/Models/Notification.php "file:///home/warugurumundia/ims/app/Models/Notification.php")  
-  - Add cast for data (array/json) and read_at (datetime)  
+- [x] Create Task model ([Task.php](file:///home/warugurumundia/ims/app/Models/Task.php))  
+  - [x] Define relation to Intern (belongsTo)  
+  - [x] Define relation to User as creator (belongsTo)  
+  - [x] Add casts for due_date (date), submitted_at (datetime), and reviewed_at (datetime)  
+- [x] Create LogbookEntry model ([LogbookEntry.php](file:///home/warugurumundia/ims/app/Models/LogbookEntry.php))  
+  - [x] Define relation to Intern (belongsTo)  
+  - [x] Add cast for entry_date (date)  
+- [x] Create GuestToken model ([GuestToken.php](file:///home/warugurumundia/ims/app/Models/GuestToken.php))  
+  - [x] Define relation to Intern (belongsTo) and User as generator (belongsTo)  
+  - [x] Add casts for expires_at (datetime) and is_revoked (boolean)  
+  - [x] Implement query scopes to filter valid/non-expired tokens  
+- [x] Create Evaluation Models:  
+  - [x] CompetencyCriteria model ([CompetencyCriteria.php](file:///home/warugurumundia/ims/app/Models/CompetencyCriteria.php))  
+  - [x] Evaluation model ([Evaluation.php](file:///home/warugurumundia/ims/app/Models/Evaluation.php)) referencing t_supervisors table  
+  - [x] EvaluationScore model ([EvaluationScore.php](file:///home/warugurumundia/ims/app/Models/EvaluationScore.php))  
+- [x] Create Supervisor model ([Supervisor.php](file:///home/warugurumundia/ims/app/Models/Supervisor.php))  
+  - [x] Define relation to User (belongsTo)  
+  - [x] Define relation to Department (belongsTo)  
+  - [x] Define relation to Evaluation (hasMany)  
+- [x] Create Notification model ([Notification.php](file:///home/warugurumundia/ims/app/Models/Notification.php))  
+  - [x] Add cast for data (array/json) and read_at (datetime)  
+- [x] Update existing models ([Intern.php](file:///home/warugurumundia/ims/app/Models/Intern.php) and [User.php](file:///home/warugurumundia/ims/app/Models/User.php)) with reciprocal relationships to new models.  
+- [x] Create automated feature tests ([Phase1ModelsTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase1ModelsTest.php)) to verify Phase 1 models.  
+
 **Phase 2: Controllers & Web Routes**  
 - Define routes in [web.php:](file:///home/warugurumundia/ims/routes/web.php "file:///home/warugurumundia/ims/routes/web.php")  
   - Under supervisor prefix:  
