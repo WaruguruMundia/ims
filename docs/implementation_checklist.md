@@ -129,18 +129,19 @@ However, the remaining modules—**Task Management**,  **Digital Logbook**,  **P
   - [x] [GuestLogbookController](file:///home/warugurumundia/ims/app/Http/Controllers/GuestLogbookController.php)  
 - [x] Create automated feature tests ([Phase2RoutesTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase2RoutesTest.php)) to verify routing, RBAC boundaries, and validation correctness.  
 **Phase 3: Frontend Views & Workflows**  
-- **Task Management Views:**  
-  - Supervisor task creation form (title, description, priority, due date, expected deliverables)  
-  - Supervisor task list & review submission screen (actions to approve or reject)  
-  - Intern task dashboard (board displaying pending, in-progress, submitted, and approved tasks)  
-  - Intern task submit form (allows writing submission comments)  
-- **Digital Logbook Views:**  
-  - Intern daily/weekly logbook entry form (fields for entry date, type, activities, challenges, skills)  
-  - Intern logbook history view  
-  - Supervisor/Guest read-only logbook inspect screen  
-- **Performance Evaluation Views:**  
-  - Supervisor evaluation form (renders active competency criteria dynamically, captures scores <= max_score, criterion-specific comment, and overall feedback)  
-  - Intern evaluation scorecard screen (displays final scores and overall feedback)  
+- [x] **Task Management Views:**  
+  - [x] Supervisor task creation form (title, description, priority, due date, expected deliverables) - [create.blade.php](file:///home/warugurumundia/ims/resources/views/supervisor/tasks/create.blade.php)  
+  - [x] Supervisor task list & review submission screen (actions to approve or reject) - [index.blade.php](file:///home/warugurumundia/ims/resources/views/supervisor/tasks/index.blade.php) & [show.blade.php](file:///home/warugurumundia/ims/resources/views/supervisor/tasks/show.blade.php)  
+  - [x] Intern task dashboard (board displaying pending, in-progress, submitted, and approved tasks) - [index.blade.php](file:///home/warugurumundia/ims/resources/views/intern/tasks/index.blade.php)  
+  - [x] Intern task submit form (allows writing submission comments) - [show.blade.php](file:///home/warugurumundia/ims/resources/views/intern/tasks/show.blade.php)  
+- [x] **Digital Logbook Views:**  
+  - [x] Intern daily/weekly logbook entry form (fields for entry date, type, activities, challenges, skills) - [create.blade.php](file:///home/warugurumundia/ims/resources/views/intern/logbook/create.blade.php)  
+  - [x] Intern logbook history view - [index.blade.php](file:///home/warugurumundia/ims/resources/views/intern/logbook/index.blade.php)  
+  - [x] Supervisor/Guest read-only logbook inspect screen - [supervisor/logbook.blade.php](file:///home/warugurumundia/ims/resources/views/supervisor/logbook.blade.php) & [guest/logbook/show.blade.php](file:///home/warugurumundia/ims/resources/views/guest/logbook/show.blade.php)  
+- [x] **Performance Evaluation Views:**  
+  - [x] Supervisor evaluation form (renders active competency criteria dynamically, captures scores <= max_score, criterion-specific comment, and overall feedback) - [create.blade.php](file:///home/warugurumundia/ims/resources/views/supervisor/evaluations/create.blade.php)  
+  - [x] Intern evaluation scorecard screen (displays final scores and overall feedback) - [intern/dashboard.blade.php](file:///home/warugurumundia/ims/resources/views/intern/dashboard.blade.php)  
+- [x] Create automated feature tests ([Phase3ViewsTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase3ViewsTest.php)) to verify Blade template compile and render outputs.  
 **Phase 4: Reporting & Notifications**  
 - Install PDF library (composer require barryvdh/laravel-dompdf)  
 - Create printable Blade template for the intern completion report ([completion_report.blade.php)](file:///home/warugurumundia/ims/resources/views/reports/completion_report.blade.php "file:///home/warugurumundia/ims/resources/views/reports/completion_report.blade.php")  
