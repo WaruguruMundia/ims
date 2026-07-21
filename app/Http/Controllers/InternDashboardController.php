@@ -12,6 +12,11 @@ class InternDashboardController extends Controller
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
-        return view('intern.dashboard', compact('intern'));
+        $evaluation = \App\Models\Evaluation::where('intern_id', $intern->id)
+            ->where('status', 'submitted')
+            ->with('evaluationScores.criteria')
+            ->first();
+
+        return view('intern.dashboard', compact('intern', 'evaluation'));
     }
 }
