@@ -164,3 +164,14 @@ However, the remaining modules—**Task Management**,  **Digital Logbook**,  **P
   - [x] PerformanceEvaluationTest (verify scoring validations and access boundaries) - covered in [Phase5VerificationTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase5VerificationTest.php)  
   - [x] CompletionReportTest (verify PDF rendering response) - covered in [Phase4ReportingTest.php](file:///home/warugurumundia/ims/tests/Feature/Phase4ReportingTest.php)  
 - [x] Run test suite (`php artisan test`) and verify 100% pass rate.  
+
+---
+
+### Custom Intern Account Activation Portal
+- [x] **Controller:** [InternActivationController](file:///home/warugurumundia/ims/app/Http/Controllers/Auth/InternActivationController.php) (securely verifies email using temporary signed links and sets password)
+- [x] **Notification:** [InternActivationNotification](file:///home/warugurumundia/ims/app/Notifications/InternActivationNotification.php) (sends signed URL activation links to pre-registered emails)
+- [x] **Views:**
+  - [x] Activation Link Request Form: [activate-request.blade.php](file:///home/warugurumundia/ims/resources/views/auth/activate-request.blade.php)
+  - [x] Password Setup Form: [activate-set-password.blade.php](file:///home/warugurumundia/ims/resources/views/auth/activate-set-password.blade.php)
+- [x] **Routing & Discovery:** Registered routes in [routes/auth.php](file:///home/warugurumundia/ims/routes/auth.php) and added link to the login screen [login.blade.php](file:///home/warugurumundia/ims/resources/views/auth/login.blade.php)
+- [x] **Testing:** Created automated feature tests [InternActivationTest.php](file:///home/warugurumundia/ims/tests/Feature/InternActivationTest.php) validating requests, signature security boundaries, and successful password registrations.
