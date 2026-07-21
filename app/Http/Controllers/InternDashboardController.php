@@ -17,6 +17,14 @@ class InternDashboardController extends Controller
             ->with('evaluationScores.criteria')
             ->first();
 
-        return view('intern.dashboard', compact('intern', 'evaluation'));
+        $tasksCount = [
+            'pending' => $intern->tasks()->where('status', 'pending')->count(),
+            'in_progress' => $intern->tasks()->where('status', 'in_progress')->count(),
+            'completed' => $intern->tasks()->whereIn('status', ['submitted', 'approved'])->count(),
+        ];
+
+        $logbookEntriesCount = $intern->logbookEntries()->count();
+
+        return view('intern.dashboard', compact('intern', 'evaluation', 'tasksCount', 'logbookEntriesCount'));
     }
 }

@@ -13,6 +13,10 @@ class AdminDashboardController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('admin.dashboard', compact('interns'));
+        $groupedInterns = $interns->groupBy(function ($intern) {
+            return $intern->supervisor ? $intern->supervisor->name : 'No Supervisor Assigned';
+        });
+
+        return view('admin.dashboard', compact('groupedInterns'));
     }
 }

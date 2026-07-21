@@ -101,6 +101,56 @@
                 </div>
             </div>
 
+            <!-- Intern Work Statistics Graph Card -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border-l-4 border-indigo-500">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                        My Work Statistics
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                        <!-- Chart container -->
+                        <div class="md:col-span-1 flex justify-center">
+                            <div class="w-48 h-48 relative">
+                                <canvas id="internStatsChart"></canvas>
+                            </div>
+                        </div>
+                        <!-- Statistics details -->
+                        <div class="md:col-span-2 space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-indigo-50 p-4 rounded border border-indigo-100 flex items-center space-x-3">
+                                    <span class="text-2xl">📔</span>
+                                    <div>
+                                        <div class="text-2xl font-extrabold text-indigo-750">{{ $logbookEntriesCount }}</div>
+                                        <div class="text-xs text-indigo-650 font-bold uppercase">Logbook Entries</div>
+                                    </div>
+                                </div>
+                                <div class="bg-green-50 p-4 rounded border border-green-100 flex items-center space-x-3">
+                                    <span class="text-2xl">✅</span>
+                                    <div>
+                                        <div class="text-2xl font-extrabold text-green-750">{{ $tasksCount['completed'] }}</div>
+                                        <div class="text-xs text-green-650 font-bold uppercase">Tasks Completed</div>
+                                    </div>
+                                </div>
+                                <div class="bg-yellow-50 p-4 rounded border border-yellow-100 flex items-center space-x-3">
+                                    <span class="text-2xl">⏳</span>
+                                    <div>
+                                        <div class="text-2xl font-extrabold text-yellow-750">{{ $tasksCount['in_progress'] }}</div>
+                                        <div class="text-xs text-yellow-650 font-bold uppercase">Tasks In Progress</div>
+                                    </div>
+                                </div>
+                                <div class="bg-red-50 p-4 rounded border border-red-100 flex items-center space-x-3">
+                                    <span class="text-2xl">📋</span>
+                                    <div>
+                                        <div class="text-2xl font-extrabold text-red-750">{{ $tasksCount['pending'] }}</div>
+                                        <div class="text-xs text-red-650 font-bold uppercase">Pending Tasks</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleElement('intern-checklist-container')">
@@ -245,5 +295,37 @@
                 if (icon) icon.classList.add('rotate-180');
             }
         }
+
+        // Draw the Chart.js doughnut chart for task stats
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('internStatsChart');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Completed', 'In Progress', 'Pending'],
+                        datasets: [{
+                            data: [
+                                {{ $tasksCount['completed'] }},
+                                {{ $tasksCount['in_progress'] }},
+                                {{ $tasksCount['pending'] }}
+                            ],
+                            backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        cutout: '70%'
+                    }
+                });
+            }
+        });
     </script>
 </x-app-layout>
