@@ -254,41 +254,49 @@
                         @endauth
                     </nav>
 
-                    <!-- Sidebar Footer (Profile, Darkmode & Logout - Integrated) -->
+                    <!-- Sidebar Footer (Profile User Info) -->
                     @auth
                         <div class="p-4 border-t border-slate-800 bg-[#1E293B] dark:bg-[#030712] mt-auto">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="truncate mr-2">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center text-white font-bold text-xs select-none">
+                                    {{ substr(Auth::user()->name, 0, 1) }}
+                                </div>
+                                <div class="truncate">
                                     <p class="text-xs font-bold text-white truncate">{{ Auth::user()->name }}</p>
                                     <p class="text-[10px] text-slate-400 truncate">{{ Auth::user()->email }}</p>
                                 </div>
-                                <!-- Dark Mode Toggle Button -->
-                                <button onclick="toggleDarkMode()" class="p-1.5 rounded-full hover:bg-slate-700 text-slate-300 focus:outline-none transition" type="button" title="Toggle Dark/Light Mode">
-                                    <!-- Sun (visible in dark mode) -->
-                                    <svg class="w-4 h-4 hidden dark:block text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
-                                    </svg>
-                                    <!-- Moon (visible in light mode) -->
-                                    <svg class="w-4 h-4 block dark:hidden text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                                    </svg>
-                                </button>
                             </div>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="w-full flex items-center justify-center space-x-2 px-3 py-1.5 bg-red-650 hover:bg-red-700 text-white rounded text-xs font-bold transition">
-                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    <span class="sidebar-link-text">Log Out</span>
-                                </button>
-                            </form>
                         </div>
                     @endauth
                 </aside>
 
                 <!-- Main Content Area -->
                 <div class="flex-1 flex flex-col overflow-y-auto">
+                    <!-- Top Minimal Navbar (accommodating ONLY dark mode toggle & logout) -->
+                    <header class="bg-white dark:bg-[#0F172A] border-b border-gray-200 dark:border-slate-800 h-14 flex items-center justify-end px-6 space-x-4 shrink-0">
+                        <!-- Dark Mode Toggle Button -->
+                        <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200 focus:outline-none transition" type="button" title="Toggle Dark/Light Mode">
+                            <!-- Sun (visible in dark mode) -->
+                            <svg class="w-5 h-5 hidden dark:block text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                            </svg>
+                            <!-- Moon (visible in light mode) -->
+                            <svg class="w-5 h-5 block dark:hidden text-gray-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            </svg>
+                        </button>
+                        
+                        <!-- Logout Button/Icon -->
+                        <form method="POST" action="{{ route('logout') }}" class="flex items-center">
+                            @csrf
+                            <button type="submit" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400 focus:outline-none transition" title="Log Out">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
+                            </button>
+                        </form>
+                    </header>
+
                     <!-- Page Heading -->
                     @isset($header)
                         <header class="bg-white shadow">
