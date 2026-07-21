@@ -1,58 +1,100 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Internship Management System (IMS)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+The **Internship Management System (IMS)** is a modern, responsive enterprise portal designed to manage and automate the onboarding, logbook tracking, and task lifecycle of interns within an organization. It features role-based access control, interactive analytics, same-day editing constraints, dynamic logging streaks, and a beautiful custom-engineered **Teal & Sapphire** interface with complete dark mode support.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 1. System Roles & Functionalities
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The system supports three user roles, each with a tailored workspace and custom modules:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🔑 Administrator Portal
+* **Department Management:** Create, list, edit, and toggle active/inactive states for organizational departments.
+* **Intern Registration:** Register new interns with detailed metadata, including:
+  * Internship Start & End Dates (restricted to current date or future start dates).
+  * Assigned Supervisor (automatically filtered by department).
+  * University, Course of Study, and registration details.
+* **Checklist Templates:** Manage global onboarding checklist templates, including required and optional items.
+* **Supervisor Overview Grouping:** View registered interns dynamically grouped under collapsable toggles by their assigned supervisor.
 
-## Learning Laravel
+### 👤 Supervisor Portal
+* **Onboarding Checklist Management:** Monitor and mark off checklist items as interns complete their required onboarding steps.
+* **Task Allocation:** Create, describe, and allocate tasks to assigned interns with defined priority levels (`High`, `Medium`, `Low`).
+* **Task Closure & Review:** Receive real-time indicators when an intern marks a task as "Complete". Review and officially close/resolve tasks from the supervisor end (reflecting as "Closed / Resolved" on the intern view).
+* **Logbook Auditing:** Review daily digital logbook entries submitted by assigned interns.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 🎓 Intern Dashboard
+* **Collapsible Checklist Overview:** Track onboarding items under structured, collapsable dropdown sections.
+* **Daily Digital Logbook:** Record daily logbook entries detailing tasks performed.
+  * **Same-Day Constraints:** Interns can only edit/update logbooks created on the current calendar date; historical entries are locked to read-only for audit integrity.
+  * **Dynamic Logging Streak:** Tracks and displays consecutive daily logging days. Gaps of one day break the streak. Powered by a vibrant, pulsing gradient streak card.
+* **Interactive Task Manager:** 
+  * View active and completed tasks history.
+  * Mark assigned tasks as "Complete" to submit them to supervisors for review.
+  * **Work Statistics Chart:** A custom-styled Chart.js doughnut wheel showing real-time task breakdowns (Completed, In Progress, Pending) with segment-spacing, hover offset dimensions, and matching status card readouts.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 2. Design System Architecture
 
-## Agentic Development
+The portal is styled using a custom **Teal & Sapphire** visual weight layout, implementing a strict contrast architecture:
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Color Palette (60-30-10 Rule)
+* **60% Dominant Neutral (`#F8FAFC`):** Soft slate workspace canvas background.
+* **30% Structural Frames:** Mellow Slate Sapphire (`#1E293B`) sidebar background and content cards.
+* **10% Accent Identifiers:** Vibrant Teal (`#2DD4BF` active lines, `#0D9488` buttons) for core interactive components.
 
+### Dark Mode Toggle
+* A persistent **Sun/Moon Toggle** located in the top navbar enables system-wide midnight theme toggling.
+* Leverages non-flicker initialization and persists user selection across page reloads via `localStorage`.
+* **Universal Text Visibility:** Automatically maps all text nodes to high-contrast slate-white (`#CBD5E1`) and headings to pure white (`#FFFFFF`) under dark theme.
+* **Action Buttons Protection:** Converts soft action badges (Edit, Delete, Deactivate, Report) to deep glow containers in dark mode for maximum accessibility.
+
+---
+
+## 3. Installation & Technical Setup
+
+Follow these steps to run the IMS portal locally:
+
+### Prerequisites
+* PHP >= 8.1
+* Composer
+* Node.js & NPM
+* SQLite / MySQL Database
+
+### Setup Instructions
+
+1. **Clone the repository and install dependencies:**
+   ```bash
+   composer install
+   npm install
+   ```
+
+2. **Configure environment variables:**
+   ```bash
+   cp .env.example .env
+   # Update DB_DATABASE or database parameters inside .env
+   ```
+
+3. **Initialize encryption keys and database:**
+   ```bash
+   php artisan key:generate
+   touch database/database.sqlite  # if using SQLite
+   php artisan migrate:fresh --seed
+   ```
+
+4. **Compile assets & start local servers:**
+   * Build the CSS/JS pipelines:
+     ```bash
+     npm run dev
+     ```
+   * Start the Laravel dev server:
+     ```bash
+     php artisan serve
+     ```
+
+### Testing
+Verify all system constraints and role behaviors by running PHPUnit tests:
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+php artisan test
 ```
-
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
