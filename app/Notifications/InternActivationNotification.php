@@ -36,7 +36,7 @@ class InternActivationNotification extends Notification
         return (new MailMessage)
             ->subject('Activate Your Intern Account')
             ->greeting('Welcome ' . $notifiable->name . '!')
-            ->line('Your intern profile has been pre-registered by your administrator.')
+            ->line('Your intern profile has been pre-registered by HR Administrator (Neema Wacuka).')
             ->line('Click the button below to verify your email and set up your account password.')
             ->action('Activate Account', $this->activationUrl)
             ->line('This link is valid for 24 hours.')

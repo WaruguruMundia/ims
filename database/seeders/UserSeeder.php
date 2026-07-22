@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'role_id'  => $roles['admin'],
-                'name'     => 'System Administrator',
+                'name'     => 'Neema Wacuka',
                 'email'    => 'admin@ims.test',
                 'password' => Hash::make('Admin@1234'),
                 'is_active' => true,

@@ -301,8 +301,8 @@
                 </td>
                 <td style="width: 10%;"></td>
                 <td style="width: 45%; border-top: 1px solid #9ca3af; text-align: center; padding-top: 5px;">
-                    <strong>___________________________</strong><br>
-                    <span style="font-size: 11px; color: #6b7280;">Human Resource / Administrator</span>
+                    <strong>Neema Wacuka</strong><br>
+                    <span style="font-size: 11px; color: #6b7280;">HR Administrator</span>
                 </td>
             </tr>
         </table>

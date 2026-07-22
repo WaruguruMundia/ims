@@ -281,7 +281,7 @@
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 14a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
                                     </svg>
-                                    <span class="sidebar-link-text">Admin Dashboard</span>
+                                    <span class="sidebar-link-text">HR Admin Dashboard</span>
                                 </a>
                                 <a href="{{ route('admin.interns.create') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition hover:bg-blue-800 {{ request()->routeIs('admin.interns.create') ? 'sidebar-link-active' : 'text-slate-100' }}">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

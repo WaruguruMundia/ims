@@ -27,7 +27,7 @@ class AuthenticatedSessionController extends Controller
             Auth::logout();
 
             throw ValidationException::withMessages([
-                'email' => 'Your account has been deactivated. Please contact the administrator.',
+                'email' => 'Your account has been deactivated. Please contact HR Administrator Neema Wacuka for assistance.',
             ]);
         }
 

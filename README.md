@@ -8,7 +8,8 @@ The **Internship Management System (IMS)** is a modern, responsive enterprise po
 
 The system supports three user roles, each with a tailored workspace and custom modules:
 
-### 🔑 Administrator Portal
+### 🔑 HR Administrator Portal (Neema Wacuka)
+* **Humanised System Administration:** Human Resources (HR) acts as the System Administrator in IMS, personified by **Neema Wacuka** (HR Administrator), retaining full system admin privileges.
 * **Department Management:** Create, list, edit, and toggle active/inactive states for organizational departments.
 * **Intern Registration:** Register new interns with detailed metadata, including:
   * Internship Start & End Dates (restricted to current date or future start dates).

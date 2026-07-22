@@ -31,7 +31,7 @@ class UserFactory extends Factory
     public function admin(): static
     {
         return $this->state(fn () => [
-            'role_id' => Role::firstOrCreate(['slug' => 'admin'], ['name' => 'Administrator'])->id,
+            'role_id' => Role::firstOrCreate(['slug' => 'admin'], ['name' => 'HR Administrator'])->id,
         ]);
     }
 

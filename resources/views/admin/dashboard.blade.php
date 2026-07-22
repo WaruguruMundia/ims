@@ -25,10 +25,10 @@
                 </div>
                 <div>
                     <h3 class="text-xl font-extrabold text-teal-700 dark:text-teal-400 tracking-tight">
-                        {{ $greeting }}, {{ Auth::user()->name }}!
+                        {{ $greeting }}, {{ Auth::user()->name }} (HR Administrator)!
                     </h3>
                     <p class="text-sm text-teal-700 dark:text-teal-400 mt-1 font-medium">
-                        Welcome to your admin dashboard. Let's manage departments, supervisors, and interns.
+                        Welcome to your HR management portal. Let's manage departments, supervisors, and interns.
                     </p>
                 </div>
             </div>
